@@ -7,26 +7,23 @@ import { ContactForm } from '../components/ContactForm';
 
 const Home: NextPage = () => {
     return (
-      <div className='h-full flex flex-col justify-around overflow-scroll'>
-        <div className='flex flex-col md:flex-row gap-6 gap-x-10 items-center mb-8'>
-          <div className='flex justify-center rounded-3xl overflow-hidden w-6/12 lg:w-10/12 lg:mb-8  md:order-2'>
-            <MyImage />
-          </div>
-          <div className='flex flex-col items-center md:items-start gap-10 md:order-1'>
-            <MyDescription />
-            <ActionButton
-              onClick={() => console.log("Know more clicked")}
-              className='px-4 py-1'
-            >
-              Know More
-            </ActionButton>
-          </div>
-        </div>
-        <div className='flex flex-col md:flex-row gap-6 gap-x-10 items-center mb-8'>
-          <ContactForm />
-        </div>
-      </div>
-    );
+		<div className='h-full flex flex-col justify-around overflow-scroll'>
+			<div className='flex flex-col md:flex-row gap-6 gap-x-10 items-center mb-8'>
+				<div className='flex justify-center rounded-3xl overflow-hidden w-6/12 lg:w-10/12 lg:mb-8  md:order-2'>
+					<MyImage />
+				</div>
+				<div className='flex flex-col items-center md:items-start gap-10 md:order-1'>
+					<MyDescription />
+					{/* <ActionButton
+						onClick={() => console.log("Know more clicked")}
+						className='px-4 py-1'
+					>
+						Know More
+					</ActionButton> */}
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export const MyImage = () => {
@@ -53,7 +50,7 @@ export const MyDescription = () => {
 				<span className='block my-2'>
 					Hi 🙋‍♂️, I am <b>Sree</b>!
 				</span>{" "}
-				An <b>engineer</b> specialized in full stack{" "}
+				<b>Engineer</b> specialized in full stack{" "}
 				<b>web development</b>.
 			</p>
 		</div>

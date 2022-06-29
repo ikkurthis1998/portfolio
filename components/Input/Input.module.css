@@ -10,24 +10,20 @@
 
 .input_container {
 	box-sizing: border-box;
-	display: inline-block;
 	position: relative;
 	width: 100%;
 	max-width: 25rem;
-	height: 2.3rem;
 }
 
 .input_label {
 	position: absolute;
-	top: 25%;
+	top: 30%;
 	left: 0.4rem;
 	font-size: 0.8rem;
 	transition: all 0.3s ease;
 	color: theme(colors.dark);
-}
-
-.input_label_dark {
-	color: theme(colors.light);
+	background-color: theme(colors.light);
+	/* background-color: transparent; */
 }
 
 .input {
@@ -38,56 +34,74 @@
 	height: 100%;
 	border: 1px solid theme(colors.dark);
 	border-radius: 0.2rem;
-	background-color: theme(colors.dark);
-	color: theme(colors.light);
+	background-color: theme(colors.light);
+	color: theme(colors.dark);
+	padding: 0.6rem 0.2rem;
 }
 
 .input:focus,
 .input:not(:placeholder-shown) {
-	border: 1px solid theme(colors.dark);
 	outline: none;
+}
+
+.input_dark {
+	background-color: theme(colors.dark);
+	border: 1px solid theme(colors.light);
+	color: theme(colors.light);
 }
 
 .input:focus + .input_label,
 .input:not(:placeholder-shown) + .input_label {
 	transform: translateY(-125%);
 	padding: 0 0.2rem;
-	color: theme(colors.dark);
 	border-radius: 0.25rem;
 	font-size: 0.7rem;
-	background-color: theme(colors.light);
+}
+
+.input_label_dark {
+	color: theme(colors.light);
+	background-color: theme(colors.dark);
+	/* background-color: transparent; */
 }
 
 .input_success .input {
-	border: 1px solid var(--color-success);
+	border: 1px solid theme(colors.success);
 }
 
 .input_success .input:focus + .input_label,
 .input_success .input:not(:placeholder-shown) + .input_label {
-	color: var(--color-success);
+	color: theme(colors.success);
 }
 
 .input_error .input {
-	border: 1px solid var(--color-error);
+	border: 1px solid theme(colors.error);
 }
 
 .input_error .input:focus + .input_label,
 .input_error .input:not(:placeholder-shown) + .input_label {
-	color: var(--color-error);
+	color: theme(colors.error);
 }
 
 .input:not(:placeholder-shown).input:not(:valid) {
-	border: 1px solid var(--color-error);
+	border: 1px solid theme(colors.error);
 }
 
 .input:not(:placeholder-shown).input:not(:valid) + .input_label {
-	color: var(--color-error);
+	color: theme(colors.error);
 }
 
 .input:not(:placeholder-shown).input:valid {
-	border: 1px solid var(--color-success);
+	border: 1px solid theme(colors.success);
 }
 
 .input:not(:placeholder-shown).input:valid + .input_label {
-	color: var(--color-success);
+	color: theme(colors.success);
+}
+
+.input_textarea {
+	height: 5rem;
+}
+
+.input_label_textarea {
+	top: 15%;
 }

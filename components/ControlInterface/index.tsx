@@ -1,11 +1,12 @@
 import Link from "next/link";
-import Router from "next/router";
-import { FC, useEffect } from "react";
+import { FC, useState } from "react";
 import { ActionButton } from "../ActionButton";
+import { ContactForm } from "../ContactForm";
 import { ToggleTheme } from "../ToggleTheme";
 
 export const ControlInterface: FC = ({ children }) => {
 
+	const [ contactFormOpen, setContactFormOpen ] = useState(false);
 
     // if (process.browser) {
     //     useEffect(() => {
@@ -25,13 +26,13 @@ export const ControlInterface: FC = ({ children }) => {
 				>
 					<img src={logo} alt='logo' className='h-36' />
 				</Link> */}
-				<div className="flex-grow flex">
+				<div className='flex-grow flex'>
 					<Link href='/'>
 						<h1 className=' font-bold font-text subpixel-antialiased flex-grow text-center cursor-pointer'>
 							ISREE
 						</h1>
 					</Link>
-					<div className="">
+					<div className=''>
 						<ToggleTheme />
 					</div>
 				</div>
@@ -44,17 +45,20 @@ export const ControlInterface: FC = ({ children }) => {
 					</div>
 					<div className='flex-grow'>
 						<p className='text-center hover:text-grey'>
-							<Link href='/blogs'>Blogs</Link>
+							<Link href='https://blog.isree.dev/'>Blogs</Link>
 						</p>
 					</div>
 				</div>
 				<div className='flex-grow text-center'>
-					<ActionButton
-						onClick={() => console.log("Contact Me clicked")}
+					{/* <ActionButton
+						onClick={() => setContactFormOpen(true)}
 						className='px-3 py-1'
 					>
 						Contact Me
-					</ActionButton>
+					</ActionButton> */}
+					<Link href='https://twitter.com/isree1998'>
+						<a>Contact Me</a>
+					</Link>
 				</div>
 			</header>
 			{children}
@@ -68,7 +72,7 @@ export const ControlInterface: FC = ({ children }) => {
 					</div>
 					<div className='flex-grow'>
 						<p className='text-center hover:text-grey'>
-							<Link href='/blogs'>Blogs</Link>
+							<Link href='https://blog.isree.dev/'>Blogs</Link>
 						</p>
 					</div>
 				</div>
@@ -78,6 +82,12 @@ export const ControlInterface: FC = ({ children }) => {
 					{/* <ToggleTheme /> */}
 				</p>
 			</footer>
+			{/* {contactFormOpen && (
+				// display a modal when the contact form is open which closes when the user clicks outside of it
+				<div className='fixed inset-0 overflow-hidden'>
+						<ContactForm />
+				</div>
+			)} */}
 		</div>
 	);
 }

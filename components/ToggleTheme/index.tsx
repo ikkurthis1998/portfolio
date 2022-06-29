@@ -14,7 +14,6 @@ export const ToggleTheme: FC = () => {
     if (!mounted) {
         return null;
     } else {
-        console.log("theme", theme);
         const icon = theme === "dark" ? "/sun.svg" : "/moon.svg";
         return (
             <button

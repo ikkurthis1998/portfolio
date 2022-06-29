@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { ActionButton } from "../ActionButton";
 import { Input } from "../Input";
 
 export const ContactForm = () => {
@@ -42,64 +43,39 @@ export const ContactForm = () => {
     };
 
     return (
-		<div className='flex flex-col justify-center'>
-			<h1 className='text-3xl font-bold'>
-				Contact Me
-            </h1>
-            <div>
-                {/* Error message will be displayed here */}
-                {error && <p className='text-red-500'>{error}</p>}
-            </div>
-            <div>
-                {/* Success message will be displayed here */}
-                {success && <p className='text-green-500'>{success}</p>}
-            </div>
+		<div className='flex flex-col shadow-inner shadow-lg shadow-light/40 p-10 rounded-xl justify-center items-center gap-2 bg-light dark:bg-dark'>
+			<h1 className='text-3xl font-bold'>Contact Me</h1>
+			<div>
+				{/* Error message will be displayed here */}
+				{error && <p className='text-red-500'>{error}</p>}
+			</div>
+			<div>
+				{/* Success message will be displayed here */}
+				{success && <p className='text-green-500'>{success}</p>}
+			</div>
 			<form
-				className='flex flex-col justify-center gap-1'
+				className='flex flex-col justify-center gap-4'
 				onSubmit={handleSubmit}
-            >
-                <Input />
-				<label className='' htmlFor='name'>
-					Name
-				</label>
-				<input
-					className='w-full p-2'
-					type='text'
-					name='name'
-                    id='name'
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder='Your name'
-                    value={name}
-				/>
-				<label className='' htmlFor='email'>
-					Email
-				</label>
-				<input
-					className='w-full p-2'
+			>
+				<Input label='Name' value={name} setValue={setName} />
+				<Input
+					label='Email'
+					value={email}
+					setValue={setEmail}
 					type='email'
-					name='email'
-                    id='email'
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder='Your email'
-                    value={email}
 				/>
-				<label className='' htmlFor='message'>
-					Message
-				</label>
-				<textarea
-					className='w-full p-2'
-					name='message'
-                    id='message'
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder='Your message'
-                    value={message}
+				<Input
+					label='Message'
+					value={message}
+					setValue={setMessage}
+					type='textarea'
 				/>
-				<button
+				<ActionButton
 					className='w-full p-2 bg-blue-500 text-white'
 					type='submit'
 				>
 					Send
-				</button>
+				</ActionButton>
 			</form>
 		</div>
 	);

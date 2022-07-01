@@ -7,7 +7,7 @@ import { ContactForm } from '../components/ContactForm';
 
 const Home: NextPage = () => {
     return (
-		<div className='h-full flex flex-col justify-around overflow-scroll'>
+		<div className='h-full flex flex-col justify-around overflow-scroll no-scrollbar'>
 			<div className='flex flex-col md:flex-row gap-6 gap-x-10 items-center mb-8'>
 				<div className='flex justify-center rounded-3xl overflow-hidden w-6/12 lg:w-10/12 lg:mb-8  md:order-2'>
 					<MyImage />

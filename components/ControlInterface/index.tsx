@@ -40,7 +40,9 @@ export const ControlInterface: FC = ({ children }) => {
 				<div className='hidden flex justify-between py-1 lg:flex flex-grow'>
 					<div className='flex-grow'>
 						<p className='text-center  hover:text-grey'>
-							<Link href='/projects'>Projects</Link>
+							<Link href='https://github.com/ikkurthis1998'>
+								Projects
+							</Link>
 						</p>
 					</div>
 					<div className='flex-grow'>
@@ -67,7 +69,9 @@ export const ControlInterface: FC = ({ children }) => {
 				<div className='flex justify-between py-1 lg:hidden'>
 					<div className='flex-grow'>
 						<p className='text-center  hover:text-grey'>
-							<Link href='/projects'>Projects</Link>
+							<Link href='https://github.com/ikkurthis1998'>
+								Projects
+							</Link>
 						</p>
 					</div>
 					<div className='flex-grow'>

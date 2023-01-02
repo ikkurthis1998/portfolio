@@ -1,9 +1,6 @@
 import type { NextPage } from "next";
 import Image from "next/image";
-import { ActionButton } from "../components/ActionButton";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { ContactForm } from "../components/ContactForm";
 
 const Home: NextPage = () => {
 	return (

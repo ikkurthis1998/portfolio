@@ -28,16 +28,16 @@ const Home: NextPage = () => {
 
 export const MyImage = () => {
   const { theme } = useTheme();
-  const image = theme === 'dark' ? '/image_color.png' : '/image_color.png';
-  const height = theme === 'dark' ? 73 : 73;
+  const image = theme === 'dark' ? '/image.png' : '/image.png';
+//   const height = theme === 'dark' ? 73 : 73;
   return (
 		<div className='w-full'>
 			<Image
 				src={image}
 				alt='profile_image'
 				width={60}
-				height={height}
-        layout='responsive'
+				height={60}
+				layout='responsive'
 			/>
 		</div>
   );

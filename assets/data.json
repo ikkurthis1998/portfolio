@@ -1,0 +1,150 @@
+{
+    "projects": [
+        {
+            "name": "Genetic Algorithm Optimization",
+            "description": "Python implementation of Genetic Algorithm for multi-variable function optimization with contour plot visualization. Developed for MDO course.",
+            "language": "Python",
+            "stars": 2,
+            "url": "https://github.com/ikkurthis1998/Genetic-Algorithm-Python",
+            "topics": [
+                "python",
+                "genetic-algorithm",
+                "optimization",
+                "visualization"
+            ]
+        },
+        {
+            "name": "Airfoil Analysis",
+            "description": "Analyse any airfoil from UIUC database in xfoil and obtain results. Python-based numerical analysis tool.",
+            "language": "Python",
+            "stars": 6,
+            "url": "https://github.com/ikkurthis1998/Airfoil_Analysis",
+            "topics": [
+                "airfoil",
+                "numerical-analysis",
+                "python3"
+            ]
+        }
+    ],
+    "experiences": [
+        {
+            "title": "Founding Engineer",
+            "company": "Neurofin.ai",
+            "duration": "2024 - Present",
+            "description": "Founding Engineer responsible for bridging engineering and product requirements. Architecting and building functional, scalable systems from the ground up.",
+            "technologies": [
+                "System Architecture",
+                "Full Stack",
+                "Product Engineering"
+            ]
+        },
+        {
+            "title": "MTS - 2 (Software)",
+            "company": "Bolt.Earth",
+            "duration": "2021 - 2024",
+            "description": "Core member of technical staff. Architected backend APIs for EV chargers (OCPP/OCPI) including discovery, booking, and OTA updates. Developed wallet and payment services. Recognized with 'Super Star Award' for exceptional quarter performance.",
+            "technologies": [
+                "TypeScript",
+                "Node.js",
+                "Kafka",
+                "Kubernetes",
+                "Microservices"
+            ]
+        },
+        {
+            "title": "Software Engineering Intern",
+            "company": "REVOS (now Bolt.Earth)",
+            "duration": "2021",
+            "description": "Interned at REVOS, contributing to the early development of EV charging infrastructure and gaining hands-on experience with backend systems.",
+            "technologies": [
+                "Backend Development",
+                "EV Infrastructure"
+            ]
+        },
+        {
+            "title": "Design Intern",
+            "company": "Space Technology and Aeronautical Rocketry (STAR)",
+            "duration": "2020",
+            "description": "Worked as a designer for a mini rocket motor static test pad. Designed a Static Test Pad capable of accommodating various high-powered rocket motors.",
+            "technologies": [
+                "Mechanical Design",
+                "Rocket Propulsion",
+                "Test Systems"
+            ]
+        },
+        {
+            "title": "Aerospace Engineering Student",
+            "company": "Amrita Vishwa Vidyapeetham",
+            "duration": "2016 - 2020",
+            "description": "Specialized in Multidisciplinary Design Optimization (MDO). Applied computational methods to solve complex engineering problems.",
+            "technologies": [
+                "MATLAB",
+                "Python",
+                "Optimization",
+                "XFOIL"
+            ]
+        }
+    ],
+    "skills": [
+        {
+            "name": "Rust",
+            "level": "Intermediate",
+            "category": "Backend"
+        },
+        {
+            "name": "TypeScript",
+            "level": "Advanced",
+            "category": "Programming"
+        },
+        {
+            "name": "Node.js",
+            "level": "Advanced",
+            "category": "Backend"
+        },
+        {
+            "name": "React",
+            "level": "Advanced",
+            "category": "Frontend"
+        },
+        {
+            "name": "Go",
+            "level": "Intermediate",
+            "category": "Backend"
+        },
+        {
+            "name": "Kubernetes",
+            "level": "Intermediate",
+            "category": "DevOps"
+        },
+        {
+            "name": "Kafka",
+            "level": "Intermediate",
+            "category": "Backend"
+        },
+        {
+            "name": "GraphQL",
+            "level": "Advanced",
+            "category": "API"
+        },
+        {
+            "name": "MongoDB",
+            "level": "Advanced",
+            "category": "Database"
+        },
+        {
+            "name": "Python",
+            "level": "Advanced",
+            "category": "Programming"
+        },
+        {
+            "name": "TailwindCSS",
+            "level": "Advanced",
+            "category": "Frontend"
+        },
+        {
+            "name": "Git",
+            "level": "Advanced",
+            "category": "Tools"
+        }
+    ]
+}

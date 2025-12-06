@@ -1,0 +1,48 @@
+[build]
+# The name of the binary to build
+bin-name = "portfolio"
+
+# The site root relative to the Cargo.toml file
+site-root = "target/site"
+
+# The output directory for the server binary
+bin-output-dir = "target/server"
+
+# The output directory for the client WASM binary
+wasm-output-dir = "target/site/pkg"
+
+# The directory for the generated JS snippets
+js-output-dir = "target/site/js"
+
+# The directory for the generated CSS files
+css-output-dir = "target/site/css"
+
+# The directory for the generated assets
+assets-output-dir = "target/site/assets"
+
+# The URL from which the client will request the server
+site-address = "127.0.0.1:3000"
+
+# The URL from which the client will request the server
+reload-port = 3001
+
+# The command to run the server
+bin-command = "cargo leptos serve"
+
+# The command to run the client
+wasm-command = "cargo leptos build --release"
+
+# Enable hot reloading in dev mode
+hot-reload = true
+
+# The features to use when compiling the client
+client-features = ["csr", "hydrate"]
+
+# The features to use when compiling the server
+server-features = ["ssr"]
+
+# The tailwind config file
+tailwind-input-file = "input.css"
+
+# The tailwind output file
+tailwind-output-file = "target/site/output.css"

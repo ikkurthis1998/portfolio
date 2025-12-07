@@ -11,6 +11,7 @@ pub fn App() -> impl IntoView {
         <html>
         <head>
             <MetaTags/>
+            <Link rel="icon" type_="image/png" href="/assets/logo.png"/>
             <Stylesheet id="leptos" href="/pkg/portfolio.css"/>
             <Title text="Sreemannarayana Ikkurthi - Portfolio"/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>

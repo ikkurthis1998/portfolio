@@ -10,7 +10,9 @@ pub fn NavBar() -> impl IntoView {
             <div class="backdrop-blur-md bg-white/80 border-b border-slate-200/50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20 items-center">
-                        <a href="/" class="text-xl font-bold text-slate-900 hover:text-blue-600">"iSree.Dev"</a>
+                        <a href="/" class="flex items-center group">
+                            <img src="/assets/logo.png" alt="Sree's Logo" class="h-[76px] w-[76px] object-contain group-hover:scale-105 transition-transform duration-300"/>
+                        </a>
                         <div class="hidden md:flex items-center space-x-10">
                             <a href="/" class="text-sm font-medium text-slate-600 hover:text-blue-600">"Home"</a>
                             <a href="/projects" class="text-sm font-medium text-slate-600 hover:text-blue-600">"Projects"</a>

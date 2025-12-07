@@ -8,6 +8,8 @@ pub struct Project {
     pub stars: u32,
     pub url: String,
     pub topics: Vec<String>,
+    #[serde(default)]
+    pub image: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

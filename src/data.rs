@@ -33,29 +33,7 @@ pub struct PortfolioData {
     pub skills: Vec<Skill>,
 }
 
-pub async fn fetch_portfolio_data() -> Result<PortfolioData, String> {
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        // On server side (SSR), we can't use gloo-net.
-        // We could implement reqwest here if we added it, but for now we'll 
-        // return an error to let the client handle the fetch (CSR fallback).
-        Err("Data fetching only supported on client".to_string())
-    }
-
-    #[cfg(target_arch = "wasm32")]
-    {
-        // URL for the data source. 
-        // TODO: Replace this with your actual remote URL (e.g. GitHub Raw Gist)
-        // For local development/testing, we can use the file served from assets
-        // let url = "https://raw.githubusercontent.com/username/repo/main/data.json";
-        let url = "/assets/data.json"; 
-        
-        gloo_net::http::Request::get(url)
-            .send()
-            .await
-            .map_err(|e| e.to_string())?
-            .json::<PortfolioData>()
-            .await
-            .map_err(|e| e.to_string())
-    }
+pub fn get_portfolio_data() -> PortfolioData {
+    const DATA: &str = include_str!("../assets/data.json");
+    serde_json::from_str(DATA).expect("Invalid data.json")
 }

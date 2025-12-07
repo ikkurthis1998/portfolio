@@ -1,36 +1,39 @@
-use axum::Router;
-use leptos_axum::generate_route_list;
-use portfolio::App;
-use tokio::net::TcpListener;
-use tower_http::services::ServeDir;
-
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() {
-    simple_logger::init_with_level(log::Level::Debug).expect("couldn't initialize logging");
+    use axum::Router;
+    use leptos::prelude::*;
+    use leptos_axum::{generate_route_list, LeptosRoutes};
+    use portfolio::App;
+    use tower_http::services::ServeDir;
 
-    // Build our application with a route
-    let conf = leptos::config::get_configuration(None).unwrap();
+    simple_logger::init_with_level(log::Level::Info).expect("couldn't initialize logging");
+
+    let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
     let addr = leptos_options.site_addr;
-    let _routes = generate_route_list(App);
+    let routes = generate_route_list(App);
 
     let app = Router::new()
-        .nest_service("/pkg", ServeDir::new("target/site/pkg"))
-        .nest_service("/static", ServeDir::new("target/site/static"))
-        .nest_service("/assets", ServeDir::new("target/site"))
-        .fallback_service(ServeDir::new(".").append_index_html_on_directories(true));
+        .nest_service("/assets", ServeDir::new("assets"))
+        .leptos_routes(&leptos_options, routes, {
+            let opts = leptos_options.clone();
+            move || shell(opts.clone())
+        })
+        .fallback(leptos_axum::file_and_error_handler(shell))
+        .with_state(leptos_options);
 
-    let listener = TcpListener::bind(&addr).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     log::info!("listening on http://{}", &addr);
-    axum::serve(listener, app.into_make_service())
-        .await
-        .unwrap();
+    axum::serve(listener, app.into_make_service()).await.unwrap();
+}
+
+#[cfg(feature = "ssr")]
+fn shell(_opts: leptos::config::LeptosOptions) -> impl leptos::prelude::IntoView {
+    use leptos::prelude::*;
+    use portfolio::App;
+    view! { <App/> }
 }
 
 #[cfg(not(feature = "ssr"))]
-pub fn main() {
-    // no client-side main function
-    // unless we want this to work with e.g., Trunk for pure client-side testing
-    // see lib.rs for hydration function instead
-}
+fn main() {}

@@ -26,16 +26,29 @@ pub fn AboutPage() -> impl IntoView {
 
 #[component]
 pub fn ExperienceCard(experience: Experience) -> impl IntoView {
+    let logo = experience.logo.clone();
     view! {
         <div class="relative pl-8 pb-10 last:pb-0 group">
             <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-slate-50"></div>
             <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900">{experience.title}</h3>
-                        <p class="text-blue-600 font-medium">{experience.company}</p>
+                <div class="flex items-start gap-4 mb-3">
+                    {logo.map(|src| {
+                        let zoom_class = if experience.logo_zoom { "w-full h-full object-cover scale-[2]" } else { "w-full h-full object-contain" };
+                        view! {
+                            <div class="w-12 h-12 rounded-lg bg-slate-50 flex-shrink-0 overflow-hidden">
+                                <img src=src alt="Company logo" class=zoom_class/>
+                            </div>
+                        }
+                    })}
+                    <div class="flex-1">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">{experience.title}</h3>
+                                <p class="text-blue-600 font-medium">{experience.company}</p>
+                            </div>
+                            <span class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">{experience.duration}</span>
+                        </div>
                     </div>
-                    <span class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">{experience.duration}</span>
                 </div>
                 <p class="text-slate-600 mb-4 leading-relaxed">{experience.description}</p>
                 <div class="flex flex-wrap gap-2">

@@ -17,6 +17,10 @@ pub struct Experience {
     pub duration: String,
     pub description: String,
     pub technologies: Vec<String>,
+    #[serde(default)]
+    pub logo: Option<String>,
+    #[serde(default)]
+    pub logo_zoom: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

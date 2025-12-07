@@ -36,7 +36,8 @@
                 "System Architecture",
                 "Full Stack",
                 "Product Engineering"
-            ]
+            ],
+            "logo": "/assets/neurofin.png"
         },
         {
             "title": "MTS - 2 (Software)",
@@ -49,7 +50,9 @@
                 "Kafka",
                 "Kubernetes",
                 "Microservices"
-            ]
+            ],
+            "logo": "/assets/bolt.earth.png",
+            "logo_zoom": true
         },
         {
             "title": "Software Engineering Intern",
@@ -59,7 +62,8 @@
             "technologies": [
                 "Backend Development",
                 "EV Infrastructure"
-            ]
+            ],
+            "logo": "/assets/revos.png"
         },
         {
             "title": "Design Intern",
@@ -70,7 +74,8 @@
                 "Mechanical Design",
                 "Rocket Propulsion",
                 "Test Systems"
-            ]
+            ],
+            "logo": "/assets/star.jpeg"
         },
         {
             "title": "Aerospace Engineering Student",
@@ -82,7 +87,8 @@
                 "Python",
                 "Optimization",
                 "XFOIL"
-            ]
+            ],
+            "logo": "/assets/Amrita_Vishwa_Vidyapeetham_-_Logo_Icon.svg.png"
         }
     ],
     "skills": [

@@ -1,0 +1,5 @@
+name = "portfolio"
+
+[build]
+features = ["ssr"]
+no-default-features = true

@@ -41,12 +41,12 @@ pub fn ExperienceCard(experience: Experience) -> impl IntoView {
                         }
                     })}
                     <div class="flex-1">
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                        <div class="flex flex-col sm:flex-row sm:items-start gap-2">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-900">{experience.title}</h3>
                                 <p class="text-blue-600 font-medium">{experience.company}</p>
                             </div>
-                            <span class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">{experience.duration}</span>
+                            <span class="text-sm font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full whitespace-nowrap w-fit sm:ml-auto">{experience.duration}</span>
                         </div>
                     </div>
                 </div>

@@ -25,7 +25,7 @@ pub fn Resume() -> impl IntoView {
             <div id="resume-content" class="max-w-[21cm] mx-auto bg-white shadow-lg print:shadow-none print:max-w-none">
                 <div class="p-8 md:p-12 print:p-0">
                     // Header
-                    <header class="border-b-2 border-slate-900 pb-6 mb-6 flex justify-between items-start gap-6">
+                    <header class="border-b-2 border-slate-900 pb-6 mb-6 flex justify-between items-center gap-6">
                         <div class="flex-1">
                             <h1 class="text-4xl font-bold text-slate-900 mb-2 uppercase tracking-tight">"Sreemannarayana Ikkurthi"</h1>
                             <p class="text-xl text-slate-600 font-medium mb-4">"Software Engineer"</p>
@@ -50,7 +50,9 @@ pub fn Resume() -> impl IntoView {
                             </div>
                         </div>
                         <div class="flex-shrink-0">
-                            <img src="/assets/IMG_4872.JPG" alt="Sreemannarayana Ikkurthi" class="w-32 h-44 rounded-md object-cover object-top shadow-sm border border-slate-200 print:w-28 print:h-40" />
+                            <div class="w-32 h-32 rounded-md overflow-hidden border border-slate-200 shadow-sm print:w-28 print:h-28">
+                                <img src="/assets/IMG_4872.JPG" alt="Sreemannarayana Ikkurthi" class="w-full h-auto object-cover object-top" />
+                            </div>
                         </div>
                     </header>
 

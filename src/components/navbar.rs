@@ -7,7 +7,7 @@ pub fn NavBar() -> impl IntoView {
             // Checkbox must be at top level for peer to work
             <input type="checkbox" id="menu-toggle" class="hidden peer"/>
             
-            <div class="backdrop-blur-md bg-white/80 border-b border-slate-200/50">
+            <div class="bg-white border-b border-slate-200">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20 items-center">
                         <a href="/" class="flex items-center group">

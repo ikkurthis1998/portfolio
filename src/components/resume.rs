@@ -23,14 +23,14 @@ pub fn Resume() -> impl IntoView {
 
             // A4 Page Container
             <div id="resume-content" class="max-w-[21cm] mx-auto bg-white shadow-lg print:shadow-none print:max-w-none">
-                <div class="p-8 md:p-12 print:p-0">
+                <div class="p-4 md:p-8 print:p-0">
                     // Header
-                    <header class="border-b-2 border-slate-900 pb-6 mb-6 flex justify-between items-center gap-6">
-                        <div class="flex-1">
-                            <h1 class="text-4xl font-bold text-slate-900 mb-2 uppercase tracking-tight">"Sreemannarayana Ikkurthi"</h1>
+                    <header class="border-b-2 border-slate-900 pb-6 mb-6 flex flex-col-reverse md:flex-row justify-between items-center gap-6">
+                        <div class="flex-1 text-center md:text-left">
+                            <h1 class="text-2xl md:text-4xl font-bold text-slate-900 mb-2 uppercase tracking-tight">"Sreemannarayana Ikkurthi"</h1>
                             <p class="text-xl text-slate-600 font-medium mb-4">"Software Engineer"</p>
                             
-                            <div class="flex flex-wrap gap-4 text-sm text-slate-600">
+                            <div class="flex flex-wrap gap-4 text-sm text-slate-600 justify-center md:justify-start">
                                 <div class="flex items-center gap-1.5">
                                     <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                     <span>"ikkurthis1998@gmail.com"</span> // Placeholder, replace if desired

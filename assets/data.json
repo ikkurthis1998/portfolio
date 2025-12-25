@@ -1,4 +1,5 @@
 {
+    "about": "Founding Engineer and Core Member of Technical Staff with extensive experience in architecting scalable backend systems, microservices, and Generative AI solutions. Proven track record of building 0-1 products, integrating LLMs, and leading technical initiatives. Proficient in Golang, Python,TypeScript, and Cloud Native technologies, with a strong focus on high-performance computing and system reliability.",
     "projects": [
         {
             "name": "Genetic Algorithm Optimization",
@@ -33,7 +34,7 @@
             "title": "Founding Engineer",
             "company": "Neurofin.ai",
             "duration": "2024 - Present",
-            "description": "Founding Engineer responsible for bridging engineering and product requirements. Architecting and building functional, scalable systems from the ground up.",
+            "description": "Founding Engineer responsible for bridging engineering and product requirements. Architecting and building functional, scalable GenAI-driven systems from the ground up.",
             "technologies": [
                 "System Architecture",
                 "Full Stack",
@@ -49,7 +50,7 @@
             "technologies": [
                 "TypeScript",
                 "Node.js",
-                "Kafka",
+                "Temporal",
                 "Kubernetes",
                 "Microservices"
             ],
@@ -95,24 +96,44 @@
     ],
     "skills": [
         {
+            "name": "Generative AI",
+            "level": "Advanced",
+            "category": "AI/ML"
+        },
+        {
+            "name": "LLMs",
+            "level": "Advanced",
+            "category": "AI/ML"
+        },
+        {
+            "name": "System Architecture",
+            "level": "Advanced",
+            "category": "Design"
+        },
+        {
+            "name": "Cloud Native",
+            "level": "Advanced",
+            "category": "Infrastructure"
+        },
+        {
             "name": "Rust",
             "level": "Intermediate",
             "category": "Backend"
         },
         {
             "name": "TypeScript",
-            "level": "Advanced",
+            "level": "Intermediate",
             "category": "Programming"
         },
         {
             "name": "Node.js",
-            "level": "Advanced",
+            "level": "Intermediate",
             "category": "Backend"
         },
         {
-            "name": "React",
-            "level": "Advanced",
-            "category": "Frontend"
+            "name": "Python",
+            "level": "Intermediate",
+            "category": "Programming"
         },
         {
             "name": "Go",
@@ -120,38 +141,38 @@
             "category": "Backend"
         },
         {
+            "name": "React",
+            "level": "Intermediate",
+            "category": "Frontend"
+        },
+        {
             "name": "Kubernetes",
             "level": "Intermediate",
             "category": "DevOps"
         },
         {
-            "name": "Kafka",
+            "name": "Temporal",
             "level": "Intermediate",
             "category": "Backend"
         },
         {
             "name": "GraphQL",
-            "level": "Advanced",
+            "level": "Intermediate",
             "category": "API"
         },
         {
             "name": "MongoDB",
-            "level": "Advanced",
+            "level": "Intermediate",
             "category": "Database"
         },
         {
-            "name": "Python",
-            "level": "Advanced",
-            "category": "Programming"
-        },
-        {
             "name": "TailwindCSS",
-            "level": "Advanced",
+            "level": "Intermediate",
             "category": "Frontend"
         },
         {
             "name": "Git",
-            "level": "Advanced",
+            "level": "Intermediate",
             "category": "Tools"
         }
     ]

@@ -3,7 +3,7 @@ use leptos::prelude::*;
 #[component]
 pub fn NavBar() -> impl IntoView {
     view! {
-        <nav class="fixed w-full top-0 z-50">
+        <nav class="fixed w-full top-0 z-50 print:hidden">
             // Checkbox must be at top level for peer to work
             <input type="checkbox" id="menu-toggle" class="hidden peer"/>
             
@@ -17,6 +17,7 @@ pub fn NavBar() -> impl IntoView {
                             <a href="/" class="text-sm font-medium text-slate-600 hover:text-blue-600">"Home"</a>
                             <a href="/projects" class="text-sm font-medium text-slate-600 hover:text-blue-600">"Projects"</a>
                             <a href="/about" class="text-sm font-medium text-slate-600 hover:text-blue-600">"About"</a>
+                            <a href="/resume" class="text-sm font-medium text-slate-600 hover:text-blue-600">"Resume"</a>
                         </div>
                         <label for="menu-toggle" class="md:hidden p-2 cursor-pointer">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,6 +34,7 @@ pub fn NavBar() -> impl IntoView {
                     <a href="/" class="block px-3 py-2 text-slate-900 hover:bg-slate-50">"Home"</a>
                     <a href="/projects" class="block px-3 py-2 text-slate-600 hover:bg-slate-50">"Projects"</a>
                     <a href="/about" class="block px-3 py-2 text-slate-600 hover:bg-slate-50">"About"</a>
+                    <a href="/resume" class="block px-3 py-2 text-slate-600 hover:bg-slate-50">"Resume"</a>
                 </div>
             </div>
         </nav>

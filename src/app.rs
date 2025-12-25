@@ -16,6 +16,8 @@ pub fn App() -> impl IntoView {
             <Title text="Sreemannarayana Ikkurthi - Portfolio"/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <script src="https://cdn.tailwindcss.com"></script>
+            <script src="/assets/html2pdf.bundle.min.js"></script>
+            <script src="/assets/script.js"></script>
         </head>
         <body>
             <Router>
@@ -26,6 +28,7 @@ pub fn App() -> impl IntoView {
                             <Route path=path!("/") view=HomePage/>
                             <Route path=path!("/projects") view=ProjectsPage/>
                             <Route path=path!("/about") view=AboutPage/>
+                            <Route path=path!("/resume") view=Resume/>
                         </Routes>
                     </main>
                 </div>

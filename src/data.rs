@@ -34,6 +34,7 @@ pub struct Skill {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct PortfolioData {
+    pub about: String,
     pub projects: Vec<Project>,
     pub experiences: Vec<Experience>,
     pub skills: Vec<Skill>,

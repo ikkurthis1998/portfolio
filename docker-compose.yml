@@ -8,6 +8,8 @@ services:
       - "3000"
     # Port mapping removed to disable direct localhost access.
     # Only the tunnel can access the application now.
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
 
   tunnel:
     image: cloudflare/cloudflared:latest

@@ -51,7 +51,7 @@ pub fn Resume() -> impl IntoView {
                         </div>
                         <div class="flex-shrink-0">
                             <div class="w-32 h-32 rounded-md overflow-hidden border border-slate-200 shadow-sm print:w-28 print:h-28">
-                                <img src="/assets/IMG_4872.JPG" alt="Sreemannarayana Ikkurthi" class="w-full h-auto object-cover object-top" />
+                                <img src="https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/IMG_4872.JPG" alt="Sreemannarayana Ikkurthi" class="w-full h-auto object-cover object-top" />
                             </div>
                         </div>
                     </header>

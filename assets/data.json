@@ -13,7 +13,7 @@
                 "optimization",
                 "visualization"
             ],
-            "image": "/assets/genetic-algorithm.png"
+            "image": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/genetic-algorithm.png"
         },
         {
             "name": "Airfoil Analysis",
@@ -26,7 +26,7 @@
                 "numerical-analysis",
                 "python3"
             ],
-            "image": "/assets/airfoil-analysis.png"
+            "image": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/airfoil-analysis.png"
         }
     ],
     "experiences": [
@@ -40,7 +40,7 @@
                 "Full Stack",
                 "Product Engineering"
             ],
-            "logo": "/assets/neurofin.png"
+            "logo": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/neurofin.png"
         },
         {
             "title": "MTS - 2 (Software)",
@@ -54,7 +54,7 @@
                 "Kubernetes",
                 "Microservices"
             ],
-            "logo": "/assets/bolt.earth.png",
+            "logo": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/bolt.earth.png",
             "logo_zoom": true
         },
         {
@@ -66,7 +66,7 @@
                 "Backend Development",
                 "EV Infrastructure"
             ],
-            "logo": "/assets/revos.png"
+            "logo": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/revos.png"
         },
         {
             "title": "Design Intern",
@@ -78,7 +78,7 @@
                 "Rocket Propulsion",
                 "Test Systems"
             ],
-            "logo": "/assets/star.jpeg"
+            "logo": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/star.jpeg"
         },
         {
             "title": "Aerospace Engineering Student",
@@ -91,7 +91,7 @@
                 "Optimization",
                 "XFOIL"
             ],
-            "logo": "/assets/Amrita_Vishwa_Vidyapeetham_-_Logo_Icon.svg.png"
+            "logo": "https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/Amrita_Vishwa_Vidyapeetham_-_Logo_Icon.svg.png"
         }
     ],
     "skills": [

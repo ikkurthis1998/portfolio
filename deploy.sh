@@ -1,7 +1,18 @@
-# Check if Docker Daemon is running
 if ! docker info > /dev/null 2>&1; then
     echo "Error: Docker daemon is not running. Please start Docker Desktop."
     exit 1
+fi
+
+# Load environment variables from .env
+if [ -f .env ]; then
+    export $(cat .env | xargs)
+fi
+
+
+
+# Switch to Session Mode (Port 5432) for Supabase to support prepared statements
+if [[ "$DATABASE_URL" == *"supabase.com"* && "$DATABASE_URL" == *":6543"* ]]; then
+    export DATABASE_URL="${DATABASE_URL//:6543/:5432}"
 fi
 
 echo "🚀 Starting Safe Deployment..."
@@ -22,13 +33,14 @@ echo "🕵️  Verifying build..."
 docker rm -f $CANDIDATE_NAME 2>/dev/null || true
 
 # Run candidate mapping port 3333 on host to 3000 in container
-docker run -d --name $CANDIDATE_NAME -p $CHECK_PORT:3000 portfolio:latest > /dev/null
+docker run -d --name $CANDIDATE_NAME -p $CHECK_PORT:3000 -e DATABASE_URL="$DATABASE_URL" portfolio:latest > /dev/null
 
 # Loop to check health (max 30 seconds)
 HEALTHY=false
 echo "   Waiting for health check on port $CHECK_PORT..."
 for i in {1..10}; do
-    if curl -s -o /dev/null -w "%{http_code}" http://localhost:$CHECK_PORT | grep -q "200"; then
+    if curl -s -f http://localhost:$CHECK_PORT/health > /dev/null; then
+        echo "   (Health Check Verified: Database is connected)"
         HEALTHY=true
         break
     fi

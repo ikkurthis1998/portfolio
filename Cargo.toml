@@ -57,7 +57,7 @@ site-root = "target/site"
 # The site-root relative folder where all compiled output (JS, WASM, CSS) is written
 site-pkg-dir = "pkg"
 # Assets source dir. All files found here will be copied and synchronized to site-root.
-assets-dir = "assets"
+# Assets source dir. All files found here will be copied and synchronized to site-root.
 # The IP and port (ex: 127.0.0.1:3000) where the server serves the content
 addr = "127.0.0.1:3000"
 # The port to use for automatic reload monitoring

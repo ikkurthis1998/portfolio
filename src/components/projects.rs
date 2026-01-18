@@ -1,20 +1,33 @@
 use leptos::prelude::*;
-use crate::data::{get_portfolio_data, Project};
+use crate::data::{fetch_portfolio_data, Project};
 
 #[component]
 pub fn ProjectsPage() -> impl IntoView {
-    let data = get_portfolio_data();
-    let projects = data.projects;
+    let portfolio_data = Resource::new(|| (), |_| fetch_portfolio_data());
     
     view! {
-        <div class="min-h-screen bg-gray-50 pt-28 pb-16">
-            <div class="max-w-6xl mx-auto px-4">
-                <h1 class="text-4xl font-bold text-center mb-12">"All Projects"</h1>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {projects.into_iter().map(|p| view! { <ProjectCard project=p/> }).collect::<Vec<_>>()}
-                </div>
-            </div>
-        </div>
+        <Suspense fallback=move || view! { <div class="min-h-screen flex items-center justify-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div> }>
+        {move || {
+            portfolio_data.get().map(|data| {
+                match data {
+                    Ok(data) => {
+                        let projects = data.projects;
+                        view! {
+                            <div class="min-h-screen bg-gray-50 pt-28 pb-16">
+                                <div class="max-w-6xl mx-auto px-4">
+                                    <h1 class="text-4xl font-bold text-center mb-12">"All Projects"</h1>
+                                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {projects.into_iter().map(|p| view! { <ProjectCard project=p/> }).collect::<Vec<_>>()}
+                                    </div>
+                                </div>
+                            </div>
+                        }.into_any()
+                    }
+                    Err(_) => view! { <div>"Error loading data"</div> }.into_any(),
+                }
+            })
+        }}
+        </Suspense>
     }
 }
 

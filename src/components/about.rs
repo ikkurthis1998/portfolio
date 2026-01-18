@@ -1,26 +1,39 @@
 use leptos::prelude::*;
-use crate::data::{get_portfolio_data, Experience};
+use crate::data::{fetch_portfolio_data, Experience};
 
 #[component]
 pub fn AboutPage() -> impl IntoView {
-    let data = get_portfolio_data();
-    let experiences = data.experiences;
+    let portfolio_data = Resource::new(|| (), |_| fetch_portfolio_data());
 
     view! {
-        <div class="min-h-screen bg-slate-50 pt-28 pb-16">
-            <div class="max-w-4xl mx-auto px-6">
-                <h1 class="text-4xl font-bold text-center mb-12 text-slate-900">"About Me"</h1>
-                <div class="bg-white rounded-xl p-8 mb-12 shadow-sm">
-                    <p class="text-xl text-slate-700 mb-4 leading-relaxed">"My path hasn't been linear—and that's what makes it interesting."</p>
-                    <p class="text-lg text-slate-500 leading-relaxed">"I started in aerospace, drawn to systems that demand precision. That same drive led me to software, where I could create and iterate at a pace I never imagined. I believe great work comes from genuine curiosity."</p>
-                </div>
-                
-                <h2 class="text-2xl font-bold mb-8 text-slate-800">"Experience"</h2>
-                <div class="border-l-2 border-slate-200 ml-3 space-y-0">
-                    {experiences.into_iter().map(|e| view! { <ExperienceCard experience=e/> }).collect::<Vec<_>>()}
-                </div>
-            </div>
-        </div>
+        <Suspense fallback=move || view! { <div class="min-h-screen flex items-center justify-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div> }>
+        {move || {
+            portfolio_data.get().map(|data| {
+                match data {
+                    Ok(data) => {
+                        let experiences = data.experiences;
+                        view! {
+                            <div class="min-h-screen bg-slate-50 pt-28 pb-16">
+                                <div class="max-w-4xl mx-auto px-6">
+                                    <h1 class="text-4xl font-bold text-center mb-12 text-slate-900">"About Me"</h1>
+                                    <div class="bg-white rounded-xl p-8 mb-12 shadow-sm">
+                                        <p class="text-xl text-slate-700 mb-4 leading-relaxed">"My path hasn't been linear—and that's what makes it interesting."</p>
+                                        <p class="text-lg text-slate-500 leading-relaxed">"I started in aerospace, drawn to systems that demand precision. That same drive led me to software, where I could create and iterate at a pace I never imagined. I believe great work comes from genuine curiosity."</p>
+                                    </div>
+                                    
+                                    <h2 class="text-2xl font-bold mb-8 text-slate-800">"Experience"</h2>
+                                    <div class="border-l-2 border-slate-200 ml-3 space-y-0">
+                                        {experiences.into_iter().map(|e| view! { <ExperienceCard experience=e/> }).collect::<Vec<_>>()}
+                                    </div>
+                                </div>
+                            </div>
+                        }.into_any()
+                    }
+                    Err(_) => view! { <div>"Error loading data"</div> }.into_any(),
+                }
+            })
+        }}
+        </Suspense>
     }
 }
 

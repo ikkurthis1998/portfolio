@@ -7,7 +7,6 @@ async fn main() {
     use leptos::prelude::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};
     use portfolio::App;
-    use tower_http::services::ServeDir;
     use portfolio::db::{self, AppState};
 
     simple_logger::init_with_level(log::Level::Debug).expect("couldn't initialize logging");
@@ -24,7 +23,6 @@ async fn main() {
 
     // build our application with a route
     let app = Router::new()
-        // .nest_service("/assets", ServeDir::new("assets")) // Assets are now CDN served
         .leptos_routes(&leptos_options, routes, {
             let opts = leptos_options.clone();
             move || shell(opts.clone())
@@ -66,6 +64,11 @@ async fn track_visitor(
             .and_then(|h| h.to_str().ok())
             .unwrap_or("unknown")
             .to_string();
+        
+        // Skip analytics for localhost
+        if domain.contains("localhost") || domain.contains("127.0.0.1") {
+            return next.run(req).await;
+        }
 
         let country = headers
             .get("cf-ipcountry")
@@ -88,6 +91,11 @@ async fn track_visitor(
                  // Fallback to direct connection info if available, or placeholder
                  "127.0.0.1".to_string() 
             });
+
+        // Skip analytics for local IP if somehow domain didn't catch it
+        if ip == "127.0.0.1" || ip == "::1" {
+             return next.run(req).await;
+        }
 
         let db = state.db.clone();
         

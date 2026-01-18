@@ -1,6 +1,7 @@
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres, Row};
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
+use leptos::prelude::*;
 
 #[derive(Clone, Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct VisitRecord {
@@ -63,6 +64,15 @@ pub async fn init_db(database_url: &str) -> Pool<Postgres> {
     pool
 }
 
+#[cfg(feature = "ssr")]
+pub async fn get_db() -> Result<Pool<Postgres>, ServerFnError> {
+    use axum::Extension;
+    use leptos_axum::extract;
+    
+    let Extension(pool): Extension<Pool<Postgres>> = extract().await?;
+    Ok(pool)
+}
+
 pub async fn record_visit(
     pool: &Pool<Postgres>,
     ip: String,
@@ -87,18 +97,18 @@ pub async fn record_visit(
 }
 
 pub async fn get_analytics(pool: &Pool<Postgres>) -> Result<AnalyticsStats, sqlx::Error> {
-    let total_visitors: i64 = sqlx::query("SELECT COUNT(*) FROM visits")
+    let total_visitors: i64 = sqlx::query("SELECT COUNT(*) FROM visits WHERE path != '/analytics'")
         .fetch_one(pool)
         .await?
         .get(0);
 
-    let unique_visitors: i64 = sqlx::query("SELECT COUNT(DISTINCT ip_address) FROM visits")
+    let unique_visitors: i64 = sqlx::query("SELECT COUNT(DISTINCT ip_address) FROM visits WHERE path != '/analytics'")
         .fetch_one(pool)
         .await?
         .get(0);
 
     let active_now: i64 = sqlx::query(
-        "SELECT COUNT(DISTINCT ip_address) FROM visits WHERE created_at > NOW() - INTERVAL '5 minutes'"
+        "SELECT COUNT(DISTINCT ip_address) FROM visits WHERE path != '/analytics' AND created_at > NOW() - INTERVAL '5 minutes'"
     )
     .fetch_one(pool)
     .await?
@@ -108,6 +118,7 @@ pub async fn get_analytics(pool: &Pool<Postgres>) -> Result<AnalyticsStats, sqlx
         r#"
         SELECT country, COUNT(*) as c
         FROM visits
+        WHERE path != '/analytics'
         GROUP BY country
         ORDER BY c DESC
         LIMIT 5
@@ -120,6 +131,7 @@ pub async fn get_analytics(pool: &Pool<Postgres>) -> Result<AnalyticsStats, sqlx
         r#"
         SELECT domain, COUNT(*) as c
         FROM visits
+        WHERE path != '/analytics'
         GROUP BY domain
         ORDER BY c DESC
         LIMIT 5
@@ -139,6 +151,7 @@ pub async fn get_analytics(pool: &Pool<Postgres>) -> Result<AnalyticsStats, sqlx
             country,
             user_agent
         FROM visits
+        WHERE path != '/analytics'
         ORDER BY created_at DESC
         LIMIT 20
         "#

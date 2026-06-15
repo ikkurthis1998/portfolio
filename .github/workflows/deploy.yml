@@ -4,7 +4,9 @@ name: Deploy to Hetzner
 # off the prod box, which co-hosts Intelligence), ship it to the Hetzner box
 # over SSH (no registry — same ethos as Intelligence), then run it via
 # docker-compose.deploy.yml. The portfolio's own Cloudflare tunnel reconnects
-# isree.dev. DATABASE_URL + TUNNEL_TOKEN come from /opt/portfolio/.env on the box.
+# isree.dev. SURREALDB_PASS + TUNNEL_TOKEN come from /opt/portfolio/.env on the box;
+# data lives in the shared SurrealDB instance's `portfolio` namespace (reached over
+# the external hetzner_intelligence-net network).
 #
 # PUBLIC REPO: trigger is push-to-master ONLY (never pull_request) so a fork's
 # PR can never reach the HETZNER_SSH_KEY deploy secret.

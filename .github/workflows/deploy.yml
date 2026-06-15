@@ -1,0 +1,64 @@
+name: Deploy to Hetzner
+
+# Build the Leptos image ON THE RUNNER (the heavy Rust release compile stays
+# off the prod box, which co-hosts Intelligence), ship it to the Hetzner box
+# over SSH (no registry — same ethos as Intelligence), then run it via
+# docker-compose.deploy.yml. The portfolio's own Cloudflare tunnel reconnects
+# isree.dev. DATABASE_URL + TUNNEL_TOKEN come from /opt/portfolio/.env on the box.
+#
+# PUBLIC REPO: trigger is push-to-master ONLY (never pull_request) so a fork's
+# PR can never reach the HETZNER_SSH_KEY deploy secret.
+#
+# One-time box prep (scoped 'deploy' user, like Intelligence): /opt/portfolio
+# owned by deploy + its .env, a root-owned /usr/local/sbin/portfolio-deploy
+# (docker load + compose up) with passwordless sudo for that one script, and
+# this workflow's deploy public key authorized for the deploy user.
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-portfolio
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Leptos image (on the runner)
+        run: docker build -t portfolio:latest .
+
+      - name: Configure SSH to the box
+        env:
+          SSH_KEY: ${{ secrets.HETZNER_SSH_KEY }}
+        run: |
+          test -n "$SSH_KEY" || { echo "::error::HETZNER_SSH_KEY secret is not set"; exit 1; }
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 46.225.180.240 >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Ship compose + image to box, then deploy
+        env:
+          BOX: deploy@46.225.180.240
+        run: |
+          scp docker-compose.deploy.yml "$BOX":/opt/portfolio/docker-compose.deploy.yml
+          docker save portfolio:latest | gzip | ssh "$BOX" 'cat > /opt/portfolio/portfolio.tar.gz'
+          ssh "$BOX" 'sudo /usr/local/sbin/portfolio-deploy'
+
+      - name: Verify isree.dev is up + healthy
+        run: |
+          for i in $(seq 1 36); do
+            h=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 https://isree.dev/health || echo 000)
+            r=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 https://isree.dev || echo 000)
+            echo "attempt $i: /health=$h  /=$r"
+            if [ "$h" = "200" ] || [ "$r" = "200" ]; then echo "isree.dev is up"; exit 0; fi
+            sleep 5
+          done
+          echo "::error::isree.dev did not return 200 after deploy"; exit 1

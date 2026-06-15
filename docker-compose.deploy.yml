@@ -1,0 +1,25 @@
+# Box-side compose for the Hetzner deploy. Runs the image BUILT + SHIPPED by
+# GitHub Actions (.github/workflows/deploy.yml) — no Rust build on the prod box
+# (it co-hosts the Intelligence stack). `.env` (DATABASE_URL + TUNNEL_TOKEN)
+# lives in /opt/portfolio on the box, never in git.
+services:
+  portfolio:
+    image: portfolio:latest
+    container_name: my-portfolio
+    restart: always
+    expose:
+      - "3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+
+  # The portfolio's OWN Cloudflare tunnel (separate from Intelligence's) —
+  # routes isree.dev → portfolio:3000. Only reachable via the tunnel.
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare-tunnel
+    restart: always
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    command: tunnel run
+    depends_on:
+      - portfolio

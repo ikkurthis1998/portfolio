@@ -48,4 +48,4 @@ chmod 0440 /etc/sudoers.d/portfolio-deploy
 visudo -cf /etc/sudoers.d/portfolio-deploy
 
 echo "OK: portfolio CD deploy path ready (/opt/portfolio, portfolio-deploy, scoped sudo, key authorized)."
-echo "Next: drop the .env into /opt/portfolio (TUNNEL_TOKEN + DATABASE_URL)."
+echo "Next: drop the .env into /opt/portfolio (TUNNEL_TOKEN + SURREALDB_PASS; data lives in the shared SurrealDB 'portfolio' namespace)."

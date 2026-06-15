@@ -39,7 +39,7 @@ pub fn HomePage() -> impl IntoView {
                                             </div>
                                             <div class="relative flex-shrink-0">
                                                 <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full blur-2xl opacity-20 scale-110"></div>
-                                                <img src="https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/IMG_4872.JPG" alt="Sreemannarayana" class="relative w-72 h-72 md:w-96 md:h-96 rounded-full object-cover object-top ring-4 ring-white shadow-2xl"/>
+                                                <img src="/assets/IMG_4872.JPG" alt="Sreemannarayana" class="relative w-72 h-72 md:w-96 md:h-96 rounded-full object-cover object-top ring-4 ring-white shadow-2xl"/>
                                             </div>
                                         </div>
                                     </div>

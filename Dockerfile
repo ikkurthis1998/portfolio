@@ -36,6 +36,10 @@ RUN apt-get update -y \
 COPY --from=builder /app/target/release/portfolio /app/
 COPY --from=builder /app/target/site /app/site
 COPY --from=builder /app/Cargo.toml /app/
+# Static assets (images + scripts relocated off Supabase Storage) served at /assets/*.
+# cargo-leptos's assets-dir already syncs these into target/site; this explicit copy
+# guarantees they land in the runtime image regardless of that behaviour.
+COPY --from=builder /app/public/assets /app/site/assets
 
 # Set the environment to Production
 ENV LEPTOS_OUTPUT_NAME="portfolio"

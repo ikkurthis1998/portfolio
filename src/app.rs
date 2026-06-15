@@ -12,15 +12,15 @@ pub fn App() -> impl IntoView {
         <html>
         <head>
             <MetaTags/>
-            <Link rel="icon" type_="image/png" href="https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/logo.png"/>
+            <Link rel="icon" type_="image/png" href="/assets/logo.png"/>
             <Title text="Sreemannarayana Ikkurthi"/>
             <Meta name="description" content="Portfolio of Sreemannarayana Ikkurthi - Software Engineer"/>
             <Link rel="stylesheet" href="/pkg/portfolio.css"/>
             <script src="https://cdn.tailwindcss.com"></script>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             // External scripts loaded from CDN
-            <script src="https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/html2pdf.bundle.min.js"></script>
-            <script src="https://ubulzoxqsrpffwtdxxht.supabase.co/storage/v1/object/public/portfolio-assets/script.js"></script>
+            <script src="/assets/html2pdf.bundle.min.js"></script>
+            <script src="/assets/script.js"></script>
         </head>
         <body>
             <Router>

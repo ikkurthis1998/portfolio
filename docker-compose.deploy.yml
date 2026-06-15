@@ -1,7 +1,13 @@
 # Box-side compose for the Hetzner deploy. Runs the image BUILT + SHIPPED by
 # GitHub Actions (.github/workflows/deploy.yml) — no Rust build on the prod box
-# (it co-hosts the Intelligence stack). `.env` (DATABASE_URL + TUNNEL_TOKEN)
+# (it co-hosts the Intelligence stack). `.env` (SURREALDB_PASS + TUNNEL_TOKEN)
 # lives in /opt/portfolio on the box, never in git.
+#
+# Data lives in the `portfolio` namespace of the SHARED SurrealDB instance that
+# Intelligence runs (container `hetzner-surrealdb-1`, reachable as `surrealdb:8000`
+# on the `hetzner_intelligence-net` docker network). The portfolio container joins
+# that network as an external network; it stays on `default` too so its own tunnel
+# can still reach it. SurrealDB has no host port — only same-network containers reach it.
 services:
   portfolio:
     image: portfolio:latest
@@ -10,7 +16,14 @@ services:
     expose:
       - "3000"
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - SURREALDB_URL=http://surrealdb:8000
+      - SURREALDB_NS=portfolio
+      - SURREALDB_DB=portfolio
+      - SURREALDB_USER=${SURREALDB_USER:-root}
+      - SURREALDB_PASS=${SURREALDB_PASS:?set SURREALDB_PASS in /opt/portfolio/.env}
+    networks:
+      - intelligence-net
+      - default
 
   # The portfolio's OWN Cloudflare tunnel (separate from Intelligence's) —
   # routes isree.dev → portfolio:3000. Only reachable via the tunnel.
@@ -23,3 +36,13 @@ services:
     command: tunnel run
     depends_on:
       - portfolio
+    networks:
+      - default
+
+networks:
+  # The Intelligence stack's network (compose project `hetzner`). Pre-existing —
+  # we attach to it, we don't create it.
+  intelligence-net:
+    external: true
+    name: hetzner_intelligence-net
+  default:

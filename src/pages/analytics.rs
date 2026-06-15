@@ -26,12 +26,8 @@ pub struct VisitRecordPublic {
 
 #[server(FetchAnalytics, "/api")]
 pub async fn fetch_analytics() -> Result<AnalyticsStatsPublic, ServerFnError> {
-    use axum::Extension;
-    use sqlx::{Pool, Postgres};
-    use leptos_axum::extract;
-
-    let Extension(db_pool): Extension<Pool<Postgres>> = extract().await?;
-    let stats = db::get_analytics(&db_pool).await.map_err(|e| ServerFnError::new(e.to_string()))?;
+    let db_client = db::get_db().await?;
+    let stats = db::get_analytics(&db_client).await.map_err(|e| ServerFnError::new(e))?;
 
     // Convert to public struct
     let recent_visits = stats.recent_visits.into_iter().map(|v| VisitRecordPublic {

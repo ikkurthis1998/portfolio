@@ -16,10 +16,19 @@ async fn main() {
     let addr = leptos_options.site_addr;
     let routes = generate_route_list(App);
 
-    // Initialize Database
-    let db_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let db_pool = db::init_db(&db_url).await;
-    let app_state = AppState { db: db_pool.clone() };
+    // Initialize SurrealDB client (the portfolio's own namespace on the shared instance)
+    let surreal_base = std::env::var("SURREALDB_URL").unwrap_or_else(|_| "http://surrealdb:8000".to_string());
+    let surreal_ns = std::env::var("SURREALDB_NS").unwrap_or_else(|_| "portfolio".to_string());
+    let surreal_db = std::env::var("SURREALDB_DB").unwrap_or_else(|_| "portfolio".to_string());
+    let surreal_user = std::env::var("SURREALDB_USER").unwrap_or_else(|_| "root".to_string());
+    // No hardcoded password default: prod supplies it via the box .env, local dev via
+    // docker-compose.yml. This keeps the shared DB's real credential out of this public repo.
+    let surreal_pass = std::env::var("SURREALDB_PASS").unwrap_or_default();
+    if surreal_pass.is_empty() {
+        log::warn!("SURREALDB_PASS is not set — SurrealDB auth will fail until it is configured");
+    }
+    let db_client = db::init_db(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass).await;
+    let app_state = AppState { db: db_client };
 
     // build our application with a route
     let app = Router::new()
@@ -57,8 +66,11 @@ async fn track_visitor(
     // Extract info
     let path = req.uri().path().to_string();
         
-    // Skip api/metrics/favicon
-    if !path.starts_with("/api") && !path.contains("favicon") {
+    // Skip api, the /health probe (the CD verify loop curls it dozens of times per
+    // deploy through the tunnel — real Host + CF IP — and would otherwise pollute
+    // the visit analytics), favicon, and static assets (/assets/* — images + scripts
+    // relocated off Supabase Storage; counting their loads would inflate the page analytics).
+    if !path.starts_with("/api") && path != "/health" && !path.starts_with("/assets/") && !path.contains("favicon") {
         let domain = headers
             .get("host")
             .and_then(|h| h.to_str().ok())
@@ -112,8 +124,8 @@ async fn track_visitor(
 async fn health_check(axum::Extension(state): axum::Extension<portfolio::db::AppState>) -> impl axum::response::IntoResponse {
     use axum::http::StatusCode;
     
-    // Perform a simple query to assert DB connection is alive
-    match sqlx::query("SELECT 1").execute(&state.db).await {
+    // Assert the SurrealDB connection is alive.
+    match state.db.health().await {
         Ok(_) => (StatusCode::OK, "OK"),
         Err(e) => {
             log::error!("Health check failed: {}", e);

@@ -22,7 +22,7 @@ simple_logger = { version = "5.0.0", optional = true }
 log = "0.4.27"
 serde_json = "1.0.145"
 gloo-net = "0.6.0"
-sqlx = { version = "0.8.3", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono"], optional = true }
+reqwest = { version = "0.12", default-features = false, features = ["json"], optional = true }
 chrono = { version = "0.4", features = ["serde"] }
 
 [features]
@@ -36,7 +36,7 @@ ssr = [
     "dep:tower",
     "dep:tower-http",
     "dep:simple_logger",
-    "dep:sqlx",
+    "dep:reqwest",
     "leptos/ssr",
     "leptos_meta/ssr",
     "leptos_router/ssr",
@@ -56,8 +56,9 @@ output-name = "portfolio"
 site-root = "target/site"
 # The site-root relative folder where all compiled output (JS, WASM, CSS) is written
 site-pkg-dir = "pkg"
-# Assets source dir. All files found here will be copied and synchronized to site-root.
-# Assets source dir. All files found here will be copied and synchronized to site-root.
+# Assets source dir. All files found here are copied/synchronized into site-root.
+# Holds public/assets/* (images + scripts relocated off Supabase Storage), served at /assets/*.
+assets-dir = "public"
 # The IP and port (ex: 127.0.0.1:3000) where the server serves the content
 addr = "127.0.0.1:3000"
 # The port to use for automatic reload monitoring

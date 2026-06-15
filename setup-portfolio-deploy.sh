@@ -30,13 +30,61 @@ chmod 600 "/home/$DEPLOY_USER/.ssh/authorized_keys"
 # root-owned deploy script — the ONLY portfolio command 'deploy' may sudo
 cat > /usr/local/sbin/portfolio-deploy <<'SCRIPT'
 #!/usr/bin/env bash
-# Root-owned. Loads the image GitHub Actions shipped + (re)starts the portfolio
-# stack (app + its own Cloudflare tunnel) from /opt/portfolio.
+# Root-owned. Loads the image GitHub Actions shipped and (re)starts the portfolio
+# stack with a HEALTH-GATE + automatic ROLLBACK to the previously-running image.
+#
+# A broken build must not silently replace the live site with no recovery: the
+# previous image is preserved as portfolio:previous, the new container must come
+# up and SERVE before it is kept, and a failed gate restores the previous image.
+# Cleanup is SCOPED (only the portfolio image from two deploys ago) — never a
+# daemon-global `docker image prune`, since this box co-hosts the Intelligence stack.
 set -euo pipefail
 cd /opt/portfolio
+COMPOSE="docker compose -f docker-compose.deploy.yml"
+
+# Remember the image two deploys old (for scoped cleanup) and preserve the
+# currently-running image as the rollback target.
+OLD_PREV_ID=""
+if docker image inspect portfolio:previous >/dev/null 2>&1; then
+  OLD_PREV_ID=$(docker image inspect portfolio:previous -f '{{.Id}}')
+fi
+if docker image inspect portfolio:latest >/dev/null 2>&1; then
+  docker tag portfolio:latest portfolio:previous
+fi
+
+# Load the new build (overwrites portfolio:latest) and bring the stack up.
 docker load < portfolio.tar.gz
-docker compose -f docker-compose.deploy.yml up -d --remove-orphans
-docker image prune -f >/dev/null 2>&1 || true
+$COMPOSE up -d --remove-orphans
+
+# Health-gate. The runtime image has no curl and port 3000 is not published to the
+# host, so probe from a one-shot sidecar on the portfolio network. ANY HTTP status
+# proves the binary booted and is serving; a broken image (won't boot / panics)
+# yields no response, which trips the rollback.
+gate() {
+  for _ in $(seq 1 24); do
+    code=$(docker run --rm --network portfolio_default curlimages/curl:latest \
+      -s -o /dev/null -w '%{http_code}' --max-time 5 http://my-portfolio:3000/health 2>/dev/null || echo 000)
+    [ "$code" != "000" ] && return 0
+    sleep 5
+  done
+  return 1
+}
+
+if ! gate; then
+  echo "portfolio-deploy: new image FAILED to serve within ~2m; rolling back to portfolio:previous" >&2
+  if docker image inspect portfolio:previous >/dev/null 2>&1; then
+    docker tag portfolio:previous portfolio:latest
+    $COMPOSE up -d --remove-orphans
+  fi
+  exit 1
+fi
+echo "portfolio-deploy: new image healthy, promoted."
+
+# Scoped cleanup: remove ONLY the portfolio image from two deploys ago, and only
+# if it is now dangling (untagged). Never prune daemon-wide.
+if [ -n "$OLD_PREV_ID" ] && [ "$(docker image inspect "$OLD_PREV_ID" -f '{{.RepoTags}}' 2>/dev/null)" = "[]" ]; then
+  docker rmi -f "$OLD_PREV_ID" >/dev/null 2>&1 || true
+fi
 SCRIPT
 chmod 0755 /usr/local/sbin/portfolio-deploy
 chown root:root /usr/local/sbin/portfolio-deploy

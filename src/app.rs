@@ -1,43 +1,38 @@
-use leptos::prelude::*;
-use leptos_meta::*;
-use leptos_router::{components::{Route, Router, Routes}, path};
 use crate::components::*;
 use crate::pages::analytics::Analytics;
+use leptos::prelude::*;
+use leptos_meta::*;
+use leptos_router::{
+    components::{Route, Router, Routes},
+    path,
+};
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-
     view! {
-        <html>
-        <head>
-            <MetaTags/>
-            <Link rel="icon" type_="image/png" href="/assets/logo.png"/>
-            <Title text="Sreemannarayana Ikkurthi"/>
-            <Meta name="description" content="Portfolio of Sreemannarayana Ikkurthi - Software Engineer"/>
-            <Link rel="stylesheet" href="/pkg/portfolio.css"/>
-            <script src="https://cdn.tailwindcss.com"></script>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            // External scripts loaded from CDN
-            <script src="/assets/html2pdf.bundle.min.js"></script>
-            <script src="/assets/script.js"></script>
-        </head>
-        <body>
-            <Router>
-                <div id="root">
-                    <NavBar/>
-                    <main>
-                        <Routes fallback=|| "Page not found.">
-                            <Route path=path!("/") view=HomePage/>
-                            <Route path=path!("/projects") view=ProjectsPage/>
-                            <Route path=path!("/about") view=AboutPage/>
-                            <Route path=path!("/resume") view=Resume/>
-                            <Route path=path!("/analytics") view=Analytics/>
-                        </Routes>
-                    </main>
-                </div>
-            </Router>
-        </body>
-        </html>
+        <Link rel="icon" type_="image/png" href="/assets/logo.png"/>
+        <Title text="Sreemannarayana Ikkurthi — Software & Systems"/>
+        <Meta name="description" content="From first principles to working products. Sreemannarayana Ikkurthi builds software systems across EV infrastructure, AI products, and computational engineering."/>
+        <Link rel="stylesheet" href="/assets/editorial.css?v=project-artwork-light-1"/>
+        <Script src="/assets/html2pdf.bundle.min.js"/>
+        <Script src="/assets/script.js?v=resume-ui-export-5"/>
+        <Router>
+            <a class="skip-link" href="#main-content">"Skip to content"</a>
+            <div id="root">
+                <NavBar/>
+                <main id="main-content">
+                    <Routes fallback=|| view! { <div class="page-wrap page-heading"><h1>"Page not found."</h1><a class="text-link" href="/">"Back home ↗"</a></div> }>
+                        <Route path=path!("/") view=HomePage/>
+                        <Route path=path!("/projects") view=ProjectsPage/>
+                        <Route path=path!("/projects/:slug") view=ProjectDetailPage/>
+                        <Route path=path!("/about") view=AboutPage/>
+                        <Route path=path!("/resume") view=Resume/>
+                        <Route path=path!("/analytics") view=Analytics/>
+                    </Routes>
+                </main>
+                <Footer/>
+            </div>
+        </Router>
     }
 }

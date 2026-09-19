@@ -24,10 +24,15 @@ async fn main() {
     // No hardcoded password default: prod supplies it via the box .env, local dev via
     // docker-compose.yml. This keeps the shared DB's real credential out of this public repo.
     let surreal_pass = std::env::var("SURREALDB_PASS").unwrap_or_default();
-    if surreal_pass.is_empty() {
+    if surreal_pass.is_empty() && std::env::var_os("PORTFOLIO_PREVIEW_DATA").is_none() {
         log::warn!("SURREALDB_PASS is not set — SurrealDB auth will fail until it is configured");
     }
-    let db_client = db::init_db(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass).await;
+    let preview = cfg!(debug_assertions) && std::env::var_os("PORTFOLIO_PREVIEW_DATA").is_some();
+    let db_client = if preview {
+        db::SurrealClient::new(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass)
+    } else {
+        db::init_db(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass).await
+    };
     let app_state = AppState { db: db_client };
 
     // build our application with a route

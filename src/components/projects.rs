@@ -1,62 +1,183 @@
+use super::editorial::{Contact, DataError, Loading};
+use crate::data::{Project, fetch_portfolio_data};
 use leptos::prelude::*;
-use crate::data::{fetch_portfolio_data, Project};
+use leptos_meta::Title;
+use leptos_router::hooks::use_params_map;
 
-#[component]
-pub fn ProjectsPage() -> impl IntoView {
-    let portfolio_data = Resource::new(|| (), |_| fetch_portfolio_data());
-    
-    view! {
-        <Suspense fallback=move || view! { <div class="min-h-screen flex items-center justify-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div> }>
-        {move || {
-            portfolio_data.get().map(|data| {
-                match data {
-                    Ok(data) => {
-                        let projects = data.projects;
-                        view! {
-                            <div class="min-h-screen bg-gray-50 pt-28 pb-16">
-                                <div class="max-w-6xl mx-auto px-4">
-                                    <h1 class="text-4xl font-bold text-center mb-12">"All Projects"</h1>
-                                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                        {projects.into_iter().map(|p| view! { <ProjectCard project=p/> }).collect::<Vec<_>>()}
-                                    </div>
-                                </div>
-                            </div>
-                        }.into_any()
-                    }
-                    Err(_) => view! { <div>"Error loading data"</div> }.into_any(),
-                }
-            })
-        }}
-        </Suspense>
+pub fn project_slug(project: &Project) -> String {
+    // Keep existing portfolio URLs stable after the product rename.
+    if project.name.eq_ignore_ascii_case("Thelivi") {
+        return "intelligence".into();
+    }
+    project
+        .name
+        .to_lowercase()
+        .split(|c: char| !c.is_alphanumeric())
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>()
+        .join("-")
+}
+
+pub fn ordered_projects(mut projects: Vec<Project>) -> Vec<Project> {
+    projects.sort_by_key(|p| match project_slug(p).as_str() {
+        "intelligence" => 0,
+        "airfoil-analysis" => 1,
+        "genetic-algorithm-optimization" => 2,
+        _ => 3,
+    });
+    projects
+}
+
+fn project_summary(project: &Project) -> String {
+    match project_slug(project).as_str() {
+        "intelligence" => "An AI agent platform for research and ongoing work, with shared project knowledge, memory, and scheduled tasks.".into(),
+        "airfoil-analysis" => "Exploring aerodynamic performance through computation. A Python tool for airfoil analysis with XFOIL.".into(),
+        "genetic-algorithm-optimization" => "Finding better solutions through evolutionary search, with contour-plot visualization.".into(),
+        _ => project.description.clone(),
+    }
+}
+
+fn category(project: &Project) -> &'static str {
+    let text = format!("{} {}", project.name, project.topics.join(" ")).to_lowercase();
+    if text.contains("airfoil") || text.contains("aerospace") {
+        "Aerospace"
+    } else if text.contains("algorithm") || text.contains("optimization") {
+        "Algorithms"
+    } else {
+        "Software"
     }
 }
 
 #[component]
-pub fn ProjectCard(project: Project) -> impl IntoView {
-    let image = project.image.clone();
+pub fn ProjectImage(project: Project) -> impl IntoView {
+    let name = project.name.clone();
+    match project.image.filter(|s| !s.is_empty()) {
+        Some(src) => view! { <img src=src alt=format!("{} — project preview", name) loading="lazy" width="1200" height="630"/> }.into_any(),
+        None => view! { <div class="project-image-fallback"><span class="mono">"PROJECT / EXPLORATION"</span><strong>{name}</strong></div> }.into_any(),
+    }
+}
+
+#[component]
+pub fn ProjectRow(project: Project, index: usize) -> impl IntoView {
+    let href = format!("/projects/{}", project_slug(&project));
+    let has_mobile_app = project_slug(&project) == "intelligence";
+    let category = category(&project);
     view! {
-        <a href={project.url} target="_blank" class="group block bg-white border rounded-2xl overflow-hidden hover:shadow-xl transition-all">
-            {image.map(|src| view! {
-                <div class="w-full h-40 overflow-hidden">
-                    <img src=src alt="Project preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
-                </div>
-            })}
-            <div class="p-6">
-                <div class="flex justify-between mb-4">
-                    <span class="px-3 py-1 rounded-full text-xs bg-slate-50">{project.language}</span>
-                    <span class="text-slate-400 text-sm flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        {project.stars}
-                    </span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 group-hover:text-blue-600">{project.name}</h3>
-                <p class="text-slate-500 text-sm mb-4">{project.description}</p>
-                <div class="flex flex-wrap gap-2">
-                    {project.topics.into_iter().take(3).map(|t| view! { <span class="text-xs text-slate-400">"#" {t}</span> }).collect::<Vec<_>>()}
-                </div>
+        <article class="project-row" class:reverse=index % 2 == 1>
+            <div class="project-copy"><p class="eyebrow">{category}</p>
+                <h2><a href=href.clone()>{project.name.clone()}</a></h2>
+                <p class="project-description">{project_summary(&project)}</p>
+                <a class="text-link" href=href.clone()>"Explore project ↗"</a>
+                {has_mobile_app.then(|| view! { <div class="project-app-links"><MobileAppLinks/></div> })}
             </div>
-        </a>
+            <a class="project-image" href=href aria-label=format!("Explore {}", project.name)><ProjectImage project=project.clone()/></a>
+        </article>
+    }
+}
+
+#[component]
+fn MobileAppLinks() -> impl IntoView {
+    view! {
+        <a class="text-link" href="https://apps.apple.com/app/id6790257232" target="_blank" rel="noopener noreferrer" aria-label="Get Thelivi for iPhone on the App Store">"iPhone app ↗"</a>
+        <span class="mono" title="Currently in closed testing">"Android — coming soon"</span>
+    }
+}
+
+#[component]
+pub fn ProjectsPage() -> impl IntoView {
+    let data = Resource::new(|| (), |_| fetch_portfolio_data());
+    let (filter, set_filter) = signal("All");
+    view! {
+        <Title text="Selected work — Sreemannarayana Ikkurthi"/>
+        <div class="page-wrap project-list">
+            <header class="page-heading"><p class="eyebrow">"Projects"</p><h1>"Selected "<span>"work."</span></h1><p>"Working software and engineering experiments, from AI research tools to aerodynamic analysis."</p></header>
+            <div class="project-filters" role="group" aria-label="Filter projects">
+                {["All", "Software", "Aerospace", "Algorithms"].into_iter().map(|label| view! {
+                    <button class:active=move || filter.get() == label aria-pressed=move || (filter.get() == label).to_string() on:click=move |_| set_filter.set(label)>{label}</button>
+                }).collect_view()}
+            </div>
+            <Suspense fallback=|| view! { <Loading/> }>{move || data.get().map(|result| match result {
+                Ok(d) => {
+                    let projects = ordered_projects(d.projects).into_iter().filter(|p| filter.get() == "All" || category(p) == filter.get()).collect::<Vec<_>>();
+                    if projects.is_empty() { view! { <p class="empty-state">"No projects in this category yet."</p> }.into_any() }
+                    else { projects.into_iter().enumerate().map(|(i,p)| view! { <ProjectRow project=p index=i/> }).collect_view().into_any() }
+                },
+                Err(_) => view! { <DataError/> }.into_any()
+            })}</Suspense>
+            <Contact/>
+        </div>
+    }
+}
+
+#[component]
+pub fn ProjectDetailPage() -> impl IntoView {
+    let params = use_params_map();
+    let data = Resource::new(|| (), |_| fetch_portfolio_data());
+    view! {
+        <div class="page-wrap">
+            <Suspense fallback=|| view! { <Loading/> }>{move || data.get().map(|result| match result {
+                Ok(d) => {
+                    let slug = params.read().get("slug").unwrap_or_default();
+                    let project = d.projects.into_iter().find(|p| project_slug(p) == slug);
+                    match project {
+                        Some(p) => {
+                            let title = format!("{} — Sreemannarayana Ikkurthi", p.name);
+                            let link_label = if p.url.contains("github.com") { "View source ↗" } else { "Visit project ↗" };
+                            view! {
+                                <Title text=title/>
+                                <header class="page-heading detail-heading"><a class="eyebrow" href="/projects">"← Work / "{category(&p)}</a><h1>{p.name.clone()}</h1>
+                                    <div class="actions"><a class="button" href=p.url.clone() target="_blank" rel="noopener noreferrer">{link_label}</a>{(project_slug(&p) == "intelligence").then(|| view! { <MobileAppLinks/> })}<span class="mono">{p.language.clone()}</span></div>
+                                </header>
+                                <div class="detail-image"><ProjectImage project=p.clone()/></div>
+                                <section class="narrative-row"><div><p class="eyebrow">"Overview"</p><h2>"What it does."</h2></div><div class="prose"><p>{p.description}</p>
+                                    <h3>"Tools & topics"</h3><ul class="topic-list">{p.topics.into_iter().map(|t| view! { <li>{t}</li> }).collect_view()}</ul>
+                                </div></section>
+                                <a class="text-link" href="/projects">"← All projects"</a>
+                                <Contact/>
+                            }.into_any()
+                        },
+                        None => view! { <Title text="Project not found — isree.dev"/><div class="page-heading"><h1>"Project not found."</h1><a class="text-link" href="/projects">"Explore all work ↗"</a></div> }.into_any()
+                    }
+                },
+                Err(_) => view! { <DataError/> }.into_any()
+            })}</Suspense>
+        </div>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn project(name: &str) -> Project {
+        Project {
+            name: name.into(),
+            description: String::new(),
+            language: String::new(),
+            stars: 0,
+            url: String::new(),
+            topics: vec![],
+            image: None,
+        }
+    }
+    #[test]
+    fn slugs_are_readable_and_stable() {
+        assert_eq!(
+            project_slug(&project("Genetic Algorithm Optimization")),
+            "genetic-algorithm-optimization"
+        );
+        assert_eq!(project_slug(&project("Systems / AI")), "systems-ai");
+    }
+    #[test]
+    fn featured_order_preserves_remaining_database_order() {
+        let ordered = ordered_projects(vec![
+            project("Other A"),
+            project("Airfoil Analysis"),
+            project("Other B"),
+            project("Intelligence"),
+        ]);
+        assert_eq!(
+            ordered.into_iter().map(|p| p.name).collect::<Vec<_>>(),
+            ["Intelligence", "Airfoil Analysis", "Other A", "Other B"]
+        );
     }
 }

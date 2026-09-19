@@ -42,8 +42,44 @@ pub struct PortfolioData {
     pub skills: Vec<Skill>,
 }
 
+// Curated from https://www.linkedin.com/in/ikkurthis1998/ on 2026-09-14.
+// Shared by About, Resume and the local snapshot; no production database writes.
+#[cfg(feature = "ssr")]
+fn current_experiences() -> Vec<Experience> {
+    serde_json::from_str(include_str!("../content/experience.json"))
+        .expect("checked-in experience content must be valid")
+}
+
+// Reviewed against Thelivi's README and Projects/Memory guides on 2026-09-14.
+// Apply to both preview and database content so every portfolio view stays consistent.
+#[cfg(feature = "ssr")]
+fn current_projects(mut projects: Vec<Project>) -> Vec<Project> {
+    for project in &mut projects {
+        if project.name.eq_ignore_ascii_case("Intelligence") || project.name.eq_ignore_ascii_case("Thelivi") {
+            project.name = "Thelivi".into();
+            project.url = "https://theli.isree.dev/".into();
+            project.image = Some("/assets/project-thelivi-light.png".into());
+            project.description = "Thelivi is an AI agent platform for research and ongoing work. It combines web browsing, document search, shared project knowledge, persistent memory, and scheduled tasks. Built with Go, TypeScript, Temporal, and SurrealDB, with an embeddable assistant for websites.".into();
+        } else if project.name.eq_ignore_ascii_case("Airfoil Analysis") {
+            project.image = Some("/assets/project-airfoil-light.png".into());
+        } else if project.name.eq_ignore_ascii_case("Genetic Algorithm Optimization") {
+            project.image = Some("/assets/project-optimization-light.png".into());
+        }
+    }
+    projects
+}
+
 #[server(FetchPortfolioData, "/api")]
 pub async fn fetch_portfolio_data() -> Result<PortfolioData, ServerFnError> {
+    // An explicit development-only snapshot of already-public content for offline UI review.
+    #[cfg(debug_assertions)]
+    if let Ok(path) = std::env::var("PORTFOLIO_PREVIEW_DATA") {
+        let json = std::fs::read_to_string(path).map_err(|_| ServerFnError::new("Preview data unavailable"))?;
+        let mut data: PortfolioData = serde_json::from_str(&json).map_err(|_| ServerFnError::new("Invalid preview data"))?;
+        data.experiences = current_experiences();
+        data.projects = current_projects(data.projects);
+        return Ok(data);
+    }
     use crate::db::get_db;
     let db = get_db().await?;
 
@@ -91,32 +127,7 @@ pub async fn fetch_portfolio_data() -> Result<PortfolioData, ServerFnError> {
     projects.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.cmp(&b.1)));
     let projects: Vec<Project> = projects.into_iter().map(|(_, _, p)| p).collect();
 
-    // experiences — order by start_date desc (NULLs last), then seq asc
-    let mut experiences: Vec<(Option<String>, i64, Experience)> = r
-        .get(2)
-        .and_then(|v| v.as_array())
-        .map(|a| {
-            a.iter()
-                .filter_map(|o| {
-                    let e: Experience = from_row(o, "experience")?;
-                    let start = o
-                        .get("start_date")
-                        .and_then(|v| v.as_str())
-                        .map(|s| s.to_string());
-                    Some((start, int_field(o, "seq"), e))
-                })
-                .collect()
-        })
-        .unwrap_or_default();
-    experiences.sort_by(|a, b| match (&a.0, &b.0) {
-        (Some(x), Some(y)) => y.cmp(x).then(a.1.cmp(&b.1)), // ISO dates: string cmp = chrono
-        (Some(_), None) => std::cmp::Ordering::Less,
-        (None, Some(_)) => std::cmp::Ordering::Greater,
-        (None, None) => a.1.cmp(&b.1),
-    });
-    let experiences: Vec<Experience> = experiences.into_iter().map(|(_, _, e)| e).collect();
-
-    // skills — order by display_order asc, then seq asc
+    // Skills retain the database ordering; experience is curated in source.
     let mut skills: Vec<(i64, i64, Skill)> = r
         .get(3)
         .and_then(|v| v.as_array())
@@ -135,8 +146,8 @@ pub async fn fetch_portfolio_data() -> Result<PortfolioData, ServerFnError> {
     Ok(PortfolioData {
         about,
         summary,
-        projects,
-        experiences,
+        projects: current_projects(projects),
+        experiences: current_experiences(),
         skills,
     })
 }

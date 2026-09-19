@@ -54,6 +54,7 @@ pub fn Analytics() -> impl IntoView {
     let analytics_resource = Resource::new(|| (), |_| fetch_analytics());
 
     view! {
+        <leptos_meta::Script src="https://cdn.tailwindcss.com"/>
         <div class="min-h-screen bg-slate-50 pt-28 pb-12 font-sans">
             <div class="max-w-7xl mx-auto px-6">
                 

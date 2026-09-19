@@ -36,7 +36,7 @@ wasm-command = "cargo leptos build --release"
 hot-reload = true
 
 # The features to use when compiling the client
-client-features = ["csr", "hydrate"]
+client-features = ["hydrate"]
 
 # The features to use when compiling the server
 server-features = ["ssr"]

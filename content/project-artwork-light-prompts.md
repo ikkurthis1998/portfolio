@@ -1,0 +1,15 @@
+# Light project artwork
+
+Built-in imagegen; approved mockup used as reference. Conceptual illustrations, not real product screenshots or simulation results.
+
+## Thelivi
+
+Production portfolio artwork ONLY, wide 16:9 canvas. Reference shows the approved STYLE: fine cobalt-blue technical lines, lightly translucent pale surfaces, soft subtle shadows on uniform pale #f7f8fd background. No website mockup, no text, no headings, no borders, no background panel. Artwork fills 90% of width and 85% of height; keep all objects complete. Restrained editorial technical illustration, no glow, dark colors, no marketing labels. Extract/recreate ONLY the right-hand Thelivi illustration from reference with exact fidelity to its approved composition and wiring: browser at left, research thread and three source tiles center, layered memory lattice upper-right, clock and task ellipse lower-right. Retain short edge-to-edge browser connector, rounded research/source-to-memory route, vertical memory connection down to task loop. Do not add new wires or a shared wave. Remove ALL page copy and page rules; illustration only. Preserve object proportions and relative positions.
+
+## Airfoil
+
+Production portfolio artwork ONLY, wide 16:9 canvas. Reference shows the approved STYLE: fine cobalt-blue technical lines, lightly translucent pale surfaces, soft subtle shadows on uniform pale #f7f8fd background. No website mockup, no text, no headings, no borders, no background panel. Artwork fills 90% of width and 85% of height; keep all objects complete. Restrained editorial technical illustration, no glow, dark colors, no marketing labels. Create companion artwork for Airfoil Analysis. Reference is style only, do not include its browser or other objects. A gracefully curved three-dimensional translucent airfoil section in shallow oblique perspective, surrounded by precisely spaced fine blue airflow lines bending smoothly around its surface. Sparse delicate construction guides, subtle dimensional shadows, clean cobalt contour. One coherent aerodynamic study, no axes labels or equations, no realistic dark metallic wing. Match reference finesse and lightness.
+
+## Optimization
+
+Production portfolio artwork ONLY, wide 16:9 canvas. Reference shows the approved STYLE: fine cobalt-blue technical lines, lightly translucent pale surfaces, soft subtle shadows on uniform pale #f7f8fd background. No website mockup, no text, no headings, no borders, no background panel. Artwork fills 90% of width and 85% of height; keep all objects complete. Restrained editorial technical illustration, no glow, dark colors, no marketing labels. Create companion artwork for Genetic Algorithm Optimization. Reference is style only, do not include browser or clock. A sculptural gently undulating translucent mathematical search landscape, in shallow isometric view, with a fine blue wireframe mesh and a few tiny cobalt candidate points. Three restrained short search trajectories converge toward one emphasized point on a hill. Elegant continuous surface, sparse and legible, not a mountainous dark scene or rainbow heatmap. Match reference delicate lines and pale shallow depth.

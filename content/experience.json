@@ -1,0 +1,87 @@
+[
+  {
+    "title": "Software Architect",
+    "company": "Neurofin AI Technologies",
+    "duration": "Apr 2026 – Present",
+    "description": "Design and guide platform architecture at Neurofin AI Technologies, translating product requirements into system designs and coordinating architectural decisions across implementation.",
+    "technologies": [
+      "System Architecture",
+      "Platform Design",
+      "Technical Strategy"
+    ]
+  },
+  {
+    "title": "Founding Engineer",
+    "company": "Neurofin AI Technologies",
+    "duration": "May 2024 – Mar 2026",
+    "description": "Architected and built GenAI-driven systems from the ground up, bridging product requirements and engineering implementation. Provided hands-on technical leadership and led development teams in delivering scalable products.",
+    "technologies": [
+      "Generative AI",
+      "Product Engineering",
+      "Full-Stack Development",
+      "Technical Leadership"
+    ]
+  },
+  {
+    "title": "Member of Technical Staff - 2 (MTS-2-Software)",
+    "company": "Bolt.Earth",
+    "duration": "Apr 2023 – May 2024",
+    "description": "Architected backend APIs for EV charging systems using OCPP and OCPI, covering charger discovery, booking, and over-the-air updates. Developed wallet and payment services as a core member of the technical staff. Received the Super Star Award for quarterly performance.",
+    "technologies": [
+      "TypeScript",
+      "Node.js",
+      "OCPP / OCPI",
+      "Microservices",
+      "Payment Systems",
+      "OTA Updates"
+    ]
+  },
+  {
+    "title": "Associate Full Stack Developer",
+    "company": "Bolt.Earth",
+    "duration": "Sep 2021 – Mar 2023",
+    "description": "Developed charger verification (KYC), charger health, user feedback, and host settlement systems supporting more than 10,000 EV charging points across India. Built a campaign system that sold 10,000 charging points and an online ordering system that automated billing and shipping.",
+    "technologies": [
+      "TypeScript",
+      "Node.js",
+      "MongoDB",
+      "Charger Operations",
+      "Billing & Settlements"
+    ]
+  },
+  {
+    "title": "Intern - Full Stack",
+    "company": "Bolt.Earth",
+    "duration": "Jul 2021 – Sep 2021",
+    "description": "Developed a microservice for discovery and booking on a peer-to-peer electric vehicle charging network, which became a foundation for subsequent charging-point operations.",
+    "technologies": [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "Discovery & Booking"
+    ]
+  },
+  {
+    "title": "Design Intern",
+    "company": "Space Technology and Aeronautical Rocketry",
+    "duration": "Nov 2020 – Dec 2020",
+    "description": "Designed a mini rocket motor static test pad capable of accommodating various high-powered rocket motors.",
+    "technologies": [
+      "Mechanical Design",
+      "Rocket Motor Testing",
+      "Test-Pad Design"
+    ]
+  },
+  {
+    "title": "B.Tech, Aerospace Engineering",
+    "company": "Amrita Vishwa Vidyapeetham, Coimbatore",
+    "duration": "2016 – 2020",
+    "description": "Grade: 8.31/10.",
+    "technologies": [
+      "MATLAB",
+      "Python",
+      "Optimization",
+      "XFOIL"
+    ]
+  }
+]

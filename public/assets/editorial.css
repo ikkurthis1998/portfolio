@@ -1251,3 +1251,10 @@ h1 span,h2 span {
 @media(prefers-reduced-motion:reduce) {
  .systems-artwork *, .systems-artwork { animation:none!important; }
 }
+
+/* Vihari privacy policy (/vihari/privacy) */
+.policy-row { margin-top:0 }
+.page-heading p.policy-updated { margin-top:28px; font-size:12px }
+.policy-list { margin:0; padding-left:20px; color:var(--muted); font-size:17px; line-height:1.7 }
+.policy-list li+li { margin-top:12px }
+.policy-list strong { color:var(--ink) }

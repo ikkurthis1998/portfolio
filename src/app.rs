@@ -14,7 +14,7 @@ pub fn App() -> impl IntoView {
         <Link rel="icon" type_="image/png" href="/assets/logo.png"/>
         <Title text="Sreemannarayana Ikkurthi — Software & Systems"/>
         <Meta name="description" content="From first principles to working products. Sreemannarayana Ikkurthi builds software systems across EV infrastructure, AI products, and computational engineering."/>
-        <Link rel="stylesheet" href="/assets/editorial.css?v=project-artwork-light-1"/>
+        <Link rel="stylesheet" href="/assets/editorial.css?v=vihari-privacy-1"/>
         <Script src="/assets/html2pdf.bundle.min.js"/>
         <Script src="/assets/script.js?v=resume-ui-export-5"/>
         <Router>
@@ -29,6 +29,7 @@ pub fn App() -> impl IntoView {
                         <Route path=path!("/about") view=AboutPage/>
                         <Route path=path!("/resume") view=Resume/>
                         <Route path=path!("/analytics") view=Analytics/>
+                        <Route path=path!("/vihari/privacy") view=VihariPrivacyPage/>
                     </Routes>
                 </main>
                 <Footer/>

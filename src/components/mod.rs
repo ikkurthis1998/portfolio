@@ -1,5 +1,6 @@
 mod about;
 mod editorial;
+mod hire;
 mod home;
 mod navbar;
 mod projects;
@@ -7,6 +8,7 @@ pub mod resume;
 mod vihari;
 pub use about::AboutPage;
 pub use editorial::Footer;
+pub use hire::HirePage;
 pub use home::HomePage;
 pub use navbar::NavBar;
 pub use projects::{ProjectDetailPage, ProjectsPage};

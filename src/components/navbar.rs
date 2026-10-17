@@ -12,7 +12,7 @@ pub fn NavBar() -> impl IntoView {
                 {move || if open.get() { "Close −" } else { "Menu +" }}
             </button>
             <nav id="primary-navigation" class="primary-nav" class:is-open=move || open.get() aria-label="Main navigation" on:click=move |_| set_open.set(false)>
-                <A href="/projects">"Work"</A><A href="/about">"About"</A><A href="/resume">"Resume"</A>
+                <A href="/projects">"Work"</A><A href="/about">"About"</A><A href="/resume">"Resume"</A><A href="/hire">"Hire me"</A>
                 <a href="/#contact">"Let’s talk ↗"</a>
             </nav>
         </header>

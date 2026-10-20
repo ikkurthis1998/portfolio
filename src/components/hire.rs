@@ -1,13 +1,6 @@
 use leptos::prelude::*;
 use leptos_meta::{Meta, Title};
 
-// TODO(signup provider): paste the form endpoint from Kit or Buttondown here. While it is empty
-// the form stays visible but submitting only shows a "not open yet" note; nothing is sent.
-//   Buttondown: "https://buttondown.com/api/emails/embed-subscribe/<username>", field "email"
-//   Kit:        "https://app.kit.com/forms/<form-id>/subscriptions",          field "email_address"
-const SIGNUP_FORM_ACTION: &str = "";
-const SIGNUP_EMAIL_FIELD: &str = "email";
-
 const UPWORK_URL: &str = "https://www.upwork.com/freelancers/~012bfd2d1589829612";
 const FIVERR_URL: &str = "https://www.fiverr.com/ikkurthis1998";
 
@@ -109,29 +102,6 @@ pub fn HirePage() -> impl IntoView {
                     <a href=FIVERR_URL target="_blank" rel="noopener noreferrer">"Fiverr ↗"</a>
                 </div></div></section>
 
-            <SignupForm/>
         </div>
-    }
-}
-
-/// "Get notified" email signup. Posts straight to the newsletter provider once SIGNUP_FORM_ACTION is set.
-#[component]
-pub fn SignupForm() -> impl IntoView {
-    let (note, set_note) = signal(None::<&'static str>);
-    let on_submit = move |ev: leptos::ev::SubmitEvent| {
-        if SIGNUP_FORM_ACTION.is_empty() {
-            ev.prevent_default();
-            set_note.set(Some("Signups aren’t open yet. Email me and I’ll add you to the list."));
-        }
-    };
-    view! {
-        <section id="signup" class="signup-section" aria-labelledby="signup-title">
-            <div><p class="eyebrow">"Newsletter"</p><h2 id="signup-title">"Get notified when I launch new tools."</h2><p>"One short email per launch. No spam, unsubscribe any time."</p></div>
-            <form class="signup-form" method="post" action=SIGNUP_FORM_ACTION target="_blank" on:submit=on_submit>
-                <label class="mono" for="signup-email">"Email address"</label>
-                <div class="signup-row"><input id="signup-email" type="email" name=SIGNUP_EMAIL_FIELD placeholder="you@example.com" autocomplete="email" required/><button class="button" type="submit">"Notify me ↗"</button></div>
-                {move || note.get().map(|n| view! { <p class="mono signup-note" role="status">{n}</p> })}
-            </form>
-        </section>
     }
 }

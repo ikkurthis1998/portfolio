@@ -94,11 +94,6 @@ pub fn HirePage() -> impl IntoView {
                 <div class="actions"><a class="text-link" href="/vihari/privacy">"Privacy policy"</a></div>
             </div></section>
 
-            <section class="narrative-row"><div><p class="eyebrow">"Proof / Bolt.Earth"</p><h2>"Helped build an"<br/><span>"EV charging network."</span></h2></div><div class="prose">
-                <p>"At Bolt.Earth I helped build the software behind its EV charging network across India: backend APIs for charger discovery and booking, wallet and payment services, and charger operations systems."</p>
-                <ul class="topic-list"><li>"TypeScript"</li><li>"Node.js"</li><li>"OCPP / OCPI"</li></ul>
-            </div></section>
-
             <section class="approach-section" aria-labelledby="process-title">
                 <p class="eyebrow section-label">"How I work"</p>
                 <div class="approach-grid"><h2 id="process-title">"Fixed scope."<br/><span>"Fixed price."</span></h2>

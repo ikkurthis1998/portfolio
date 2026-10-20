@@ -8,9 +8,8 @@ use leptos_meta::{Meta, Title};
 const SIGNUP_FORM_ACTION: &str = "";
 const SIGNUP_EMAIL_FIELD: &str = "email";
 
-// TODO(links): replace with the real Upwork profile / Project Catalog and Fiverr gig URLs.
-const UPWORK_URL: &str = "[UPWORK LINK]";
-const FIVERR_URL: &str = "[FIVERR LINK]";
+const UPWORK_URL: &str = "https://www.upwork.com/freelancers/~012bfd2d1589829612";
+const FIVERR_URL: &str = "https://www.fiverr.com/ikkurthis1998";
 
 struct Tier {
     name: &'static str,
@@ -104,7 +103,7 @@ pub fn HirePage() -> impl IntoView {
                 <p class="eyebrow section-label">"How I work"</p>
                 <div class="approach-grid"><h2 id="process-title">"Fixed scope."<br/><span>"Fixed price."</span></h2>
                     <div><span class="mono">"01"</span><h3>"Written plan first"</h3><p>"You get the scope in writing and a fixed price before any work starts."</p></div>
-                    <div><span class="mono">"02"</span><h3>"Demos every few days"</h3><p>"You see working progress every few days, so feedback lands early, not at the end."</p></div>
+                    <div><span class="mono">"02"</span><h3>"Progress you can see"</h3><p>"On longer packages you see working demos as I go, so feedback lands early, not at the end."</p></div>
                     <div><span class="mono">"03"</span><h3>"Clean, tested code"</h3><p>"Readable code with tests and docs, handed over so anyone can pick it up."</p></div>
                 </div>
             </section>

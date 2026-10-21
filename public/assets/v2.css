@@ -107,8 +107,7 @@ ul, ol { padding: 0; list-style: none; }
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 button { font: inherit; color: inherit; }
-h1, h2, h3 { text-wrap: balance; }
-p { text-wrap: pretty; }
+h1, h2 { text-wrap: balance; }
 :focus-visible { outline: 2px solid var(--accent-fill); outline-offset: 2px; }
 
 #root { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
@@ -204,7 +203,8 @@ main { flex: 1 0 auto; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ── Card ────────────────────────────────────────────────────────────── */
-.card { background: var(--surface); border: 1px solid var(--border-card); border-radius: 24px; box-shadow: var(--shadow-card); }
+/* Strokes sit inside the box, as in Figma, so outlines are inset rings rather than borders. */
+.card { background: var(--surface); border-radius: 24px; box-shadow: inset 0 0 0 1px var(--border-card), var(--shadow-card); }
 
 /* ── Header and navigation ───────────────────────────────────────────── */
 .skip-link {
@@ -214,7 +214,7 @@ main { flex: 1 0 auto; }
   font-size: 13px; line-height: 18px; font-weight: 700; transform: translateY(-200%);
 }
 .skip-link:focus, .skip-link:focus-visible { transform: none; outline: none; }
-.site-header { position: relative; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--hairline); }
+.site-header { position: relative; z-index: 20; background: var(--surface); box-shadow: inset 0 -1px 0 var(--hairline); }
 .nav-bar { height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .nav-links { display: flex; align-items: center; gap: 32px; }
 .nav-link { position: relative; font-size: 17px; line-height: 22px; font-weight: 700; color: var(--text-2); transition: color 120ms ease; }
@@ -228,7 +228,7 @@ main { flex: 1 0 auto; }
   .nav-links { display: none; }
   .menu-button { display: inline-flex; }
   .mobile-menu.is-open {
-    display: flex; flex-direction: column; gap: 24px; position: fixed; z-index: 19; inset: 57px 0 0 0;
+    display: flex; flex-direction: column; gap: 24px; position: fixed; z-index: 19; inset: 56px 0 0 0;
     padding: 8px var(--gutter) 24px; background: var(--surface); overflow-y: auto;
   }
   .menu-rows a { display: flex; align-items: center; height: 56px; border-bottom: 1px solid var(--hairline); font-size: 17px; line-height: 22px; font-weight: 700; color: var(--text); position: relative; }
@@ -239,7 +239,7 @@ main { flex: 1 0 auto; }
 }
 
 /* ── Footer ──────────────────────────────────────────────────────────── */
-.site-footer { background: var(--surface); border-top: 1px solid var(--hairline); }
+.site-footer { background: var(--surface); box-shadow: inset 0 1px 0 var(--hairline); }
 .footer-bar { position: relative; height: 96px; display: flex; align-items: center; justify-content: space-between; }
 .footer-tagline { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; color: var(--text-2); }
 @media (max-width: 639.98px) {
@@ -287,7 +287,7 @@ main { flex: 1 0 auto; }
 .family-hub {
   position: absolute; top: 140px; left: 50%; transform: translateX(-50%); z-index: 1;
   display: inline-flex; align-items: center; height: 40px; padding: 4px 16px 4px 4px; border-radius: 999px;
-  background: var(--surface); border: 1px solid var(--border-card); box-shadow: var(--shadow-sm);
+  background: var(--surface); box-shadow: inset 0 0 0 1px var(--border-card), var(--shadow-sm);
 }
 .family-node { padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .node-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -331,24 +331,27 @@ main { flex: 1 0 auto; }
 @media (max-width: 899.98px) { .products-grid { grid-template-columns: 1fr; } }
 
 /* ── Step cards (How I work) ─────────────────────────────────────────── */
+.steps { grid-auto-rows: 1fr; }
 .step-card { padding: var(--card-pad); display: flex; flex-direction: column; gap: 12px; }
-.how-i-work .step-card { min-height: 196px; }
+@media (min-width: 1280px) { .how-i-work .step-card { min-height: 196px; } }
 .step-card .num { font-size: 13px; line-height: 24px; font-weight: 700; color: var(--text-3); }
 .step-text { display: flex; flex-direction: column; gap: 8px; }
-@media (max-width: 1279.98px) { .steps { grid-template-columns: 1fr; } .step-card { min-height: 0; } }
+@media (max-width: 1279.98px) { .steps { grid-template-columns: 1fr; } .how-i-work .step-card { min-height: 144px; } }
+@media (max-width: 899.98px) { .how-i-work .step-card { min-height: 168px; } }
+@media (max-width: 639.98px) { .product-card { min-height: 416px; } }
 @media (max-width: 639.98px) { .steps { gap: 16px; } }
 
 /* ── Experience: career cards with the staircase ─────────────────────── */
 .career-card { padding: var(--card-pad); display: flex; flex-direction: column; gap: 24px; }
 .org { display: flex; align-items: center; gap: 12px; }
-.org-logo { flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--on-accent); border: 1px solid var(--border-card); display: grid; place-items: center; }
+.org-logo { flex: none; width: 40px; height: 40px; border-radius: 12px; background: var(--on-accent); box-shadow: inset 0 0 0 1px var(--border-card); display: grid; place-items: center; }
 .org-logo img { width: 32px; height: 32px; object-fit: contain; }
 .org-text { display: flex; flex-direction: column; min-width: 0; }
 .stair { display: flex; align-items: flex-end; }
 .step { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
 .step-label { min-height: 56px; padding-right: 8px; display: flex; flex-direction: column; justify-content: flex-end; }
-.role-line { display: flex; flex-wrap: wrap; align-items: center; column-gap: 8px; }
-.role-line .t-label { color: var(--text); text-wrap: balance; }
+.role-line { display: flex; align-items: center; column-gap: 8px; }
+.role-line .t-label { color: var(--text); white-space: pre-line; }
 .track { position: relative; height: 8px; margin-top: 8px; --line: var(--text-3); }
 .track::after { content: ""; position: absolute; left: 4px; right: -1px; top: 3px; height: 2px; background: var(--line); }
 .track .dot { position: absolute; z-index: 1; left: 0; top: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--surface); border: 2px solid var(--line); }
@@ -426,7 +429,11 @@ main { flex: 1 0 auto; }
 .exp-card { padding: 24px; display: grid; grid-template-columns: 360fr 768fr; gap: 24px; align-items: start; }
 .role { display: flex; flex-direction: column; }
 .detail { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-@media (max-width: 1279.98px) { .exp-card { padding: 16px; grid-template-columns: 1fr; gap: 12px; } }
+@media (max-width: 639.98px) { .exp-list { gap: 16px; } }
+@media (max-width: 1279.98px) {
+  .exp-card { padding: 16px; grid-template-columns: 1fr; gap: 12px; }
+  .exp-card .t-prose { font-size: 15px; line-height: 22px; }
+}
 
 /* ── Resume ──────────────────────────────────────────────────────────── */
 .resume-page { gap: 32px; }
@@ -443,6 +450,9 @@ main { flex: 1 0 auto; }
 .resume-identity { display: flex; flex-direction: column; gap: 8px; }
 .resume-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin-top: 0; }
 .resume-contact a { display: inline-flex; align-items: center; gap: 8px; min-height: 24px; font-size: 13px; line-height: 18px; font-weight: 700; color: var(--text); }
+.resume-contact .icon { color: var(--text-2); }
+.resume-identity .t-prose { line-height: 28px; }
+@media (max-width: 639.98px) { .resume-identity .t-prose { line-height: 24px; } }
 .resume-contact a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .resume-section { display: flex; flex-direction: column; gap: 16px; }
 .resume-list { display: flex; flex-direction: column; }
@@ -452,15 +462,16 @@ main { flex: 1 0 auto; }
 .resume-project-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .resume-project-name { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 8px; }
 @media (max-width: 1279.98px) { .resume-entry { grid-template-columns: 1fr; gap: 8px; } }
-@media (max-width: 899.98px) { .resume-doc { padding: 32px; } }
+@media (max-width: 899.98px) { .resume-doc { padding: 24px; gap: 32px; } }
 @media (max-width: 639.98px) {
   .resume-doc { padding: 16px; gap: 32px; }
   .resume-project-head { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
 /* The A4 document (print and the PDF export): Light only, 794 wide, 48 margin, Body sizes */
-.resume-pdf .resume-doc, .resume-pdf.resume-doc { width: 794px; padding: 48px; gap: 32px; border: 0; border-radius: 0; box-shadow: none; background: #ffffff; }
+.resume-pdf .resume-doc, .resume-pdf.resume-doc { width: 794px; padding: 48px; gap: 32px; border-radius: 0; box-shadow: none; background: #ffffff; }
 .resume-pdf .t-prose { font-size: 15px; line-height: 22px; }
 .resume-pdf .resume-entry { grid-template-columns: 1fr; gap: 8px; }
+.resume-pdf .resume-identity .t-prose { line-height: 24px; }
 .resume-pdf .resume-role-name { font-size: 15px; line-height: 22px; }
 
 /* ── Hire ────────────────────────────────────────────────────────────── */
@@ -491,8 +502,8 @@ main { flex: 1 0 auto; }
 .policy-list strong { font-weight: 400; color: var(--text); }
 .policy-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 @media (max-width: 639.98px) { .policy-list li::before { margin-top: 8px; } }
-@media (max-width: 1279.98px) { .policy-section { grid-template-columns: 1fr; gap: 16px; } }
-@media (max-width: 639.98px) { .policy-section { padding-block: 24px; } }
+@media (max-width: 1279.98px) { .policy-section { grid-template-columns: 1fr; } }
+@media (max-width: 639.98px) { .policy-section { padding-block: 24px; gap: 16px; } }
 
 /* ── Print: the resume prints as the A4 document, Light only ─────────── */
 @media print {
@@ -505,5 +516,6 @@ main { flex: 1 0 auto; }
   .resume-doc { width: auto; max-width: 794px; margin: 0 auto; padding: 48px; gap: 32px; border: 0; border-radius: 0; box-shadow: none; }
   .resume-doc .t-prose { font-size: 15px; line-height: 22px; }
   .resume-entry { grid-template-columns: 1fr; gap: 8px; }
+  .resume-identity .t-prose { line-height: 24px; }
   .t-display-web { font-size: 32px; line-height: 36px; }
 }

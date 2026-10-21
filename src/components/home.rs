@@ -223,9 +223,18 @@ fn split_duration(duration: &str) -> (String, String) {
 }
 
 /// The staircase shows short titles: "Member of Technical Staff - 2 (MTS-2-Software)" → "Member of Technical Staff - 2".
+/// A short trailing grade stays with its noun on a line of its own, as in the design:
+/// "Member of Technical / Staff - 2".
 fn short_title(title: &str) -> String {
-    match title.find(" (") {
-        Some(i) if title.ends_with(')') => title[..i].to_string(),
+    let title = match title.find(" (") {
+        Some(i) if title.ends_with(')') => &title[..i],
+        _ => title,
+    };
+    match title.rsplit_once(" - ") {
+        Some((head, grade)) if grade.chars().count() <= 2 => match head.rsplit_once(' ') {
+            Some((rest, noun)) => format!("{rest}\n{noun}\u{a0}-\u{a0}{grade}"),
+            None => format!("{head}\u{a0}-\u{a0}{grade}"),
+        },
         _ => title.to_string(),
     }
 }
@@ -269,7 +278,7 @@ fn CareerCard(career: Career) -> impl IntoView {
                     <li class="step" class:is-current=r.current style=format!("padding-bottom:{}px", 16 * i)>
                         <div class="step-label">
                             <p class="role-line"><span class="t-label role-title">{r.title}</span>{r.current.then(|| view! { <span class="badge">"Now"</span> })}</p>
-                            <p class="t-caption c-2 role-dates">{format!("{} – {}", r.start, r.end)}</p>
+                            <p class="t-caption c-2 role-dates">{format!("{}\u{a0}– {}", r.start, r.end)}</p>
                         </div>
                         <div class="track" aria-hidden="true">{(i > 0).then(|| view! { <span class="riser"></span> })}<span class="dot"></span></div>
                     </li>
@@ -308,7 +317,8 @@ mod tests {
         assert_eq!(careers[0].roles[0].title, "Founding Engineer");
         assert!(careers[0].roles[1].current && !careers[0].roles[0].current);
         assert_eq!(careers[0].chips, ["A", "B", "C"]);
-        assert_eq!(careers[1].roles[1].title, "Member of Technical Staff - 2");
+        assert_eq!(careers[1].roles[1].title, "Member of Technical\nStaff\u{a0}-\u{a0}2");
+        assert_eq!(careers[1].roles[0].title, "Intern - Full Stack");
         assert_eq!(careers[1].span, "Jul 2021 – May 2024");
         assert_eq!(careers[2].span, "2016 – 2020");
         assert!(careers[2].logo.is_some());

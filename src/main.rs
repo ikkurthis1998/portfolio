@@ -150,6 +150,9 @@ fn shell(opts: leptos::config::LeptosOptions) -> impl leptos::prelude::IntoView 
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="color-scheme" content="light dark"/>
+                <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"/>
+                <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)"/>
                 <AutoReload options=opts.clone().into() />
                 <HydrationScripts options=opts.into() />
                 <MetaTags/>

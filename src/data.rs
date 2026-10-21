@@ -58,12 +58,12 @@ fn current_projects(mut projects: Vec<Project>) -> Vec<Project> {
         if project.name.eq_ignore_ascii_case("Intelligence") || project.name.eq_ignore_ascii_case("Thelivi") {
             project.name = "Thelivi".into();
             project.url = "https://thelivi.isree.dev/".into();
-            project.image = Some("/assets/project-thelivi-light.png".into());
+            project.image = Some("/assets/v2/project-thelivi-light.webp".into());
             project.description = "Thelivi is an AI agent platform for research and ongoing work. It combines web browsing, document search, shared project knowledge, persistent memory, and scheduled tasks. Built with Go, TypeScript, Temporal, and SurrealDB, with an embeddable assistant for websites.".into();
         } else if project.name.eq_ignore_ascii_case("Airfoil Analysis") {
-            project.image = Some("/assets/project-airfoil-light.png".into());
+            project.image = Some("/assets/v2/project-airfoil-light.webp".into());
         } else if project.name.eq_ignore_ascii_case("Genetic Algorithm Optimization") {
-            project.image = Some("/assets/project-optimization-light.png".into());
+            project.image = Some("/assets/v2/project-ga-light.webp".into());
         }
     }
     projects

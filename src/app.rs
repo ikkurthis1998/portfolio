@@ -1,4 +1,5 @@
 use crate::components::*;
+use crate::components::ui::TextLink;
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{
@@ -10,18 +11,19 @@ use leptos_router::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
     view! {
-        <Link rel="icon" type_="image/png" href="/assets/logo.png"/>
+        <Link rel="icon" type_="image/svg+xml" href="/assets/favicon.svg"/>
         <Title text="Sreemannarayana Ikkurthi — Software & Systems"/>
         <Meta name="description" content="From first principles to working products. Sreemannarayana Ikkurthi builds software systems across EV infrastructure, AI products, and computational engineering."/>
-        <Link rel="stylesheet" href="/assets/editorial.css?v=hire-2"/>
+        <Link rel="preload" href="/assets/fonts/nunito-latin-wght-normal.woff2" as_="font" type_="font/woff2" crossorigin="anonymous"/>
+        <Link rel="stylesheet" href="/assets/v2.css?v=2"/>
         <Script src="/assets/html2pdf.bundle.min.js"/>
-        <Script src="/assets/script.js?v=resume-ui-export-5"/>
+        <Script src="/assets/script.js?v=resume-v2"/>
         <Router>
             <a class="skip-link" href="#main-content">"Skip to content"</a>
             <div id="root">
                 <NavBar/>
                 <main id="main-content">
-                    <Routes fallback=|| view! { <div class="page-wrap page-heading"><h1>"Page not found."</h1><a class="text-link" href="/">"Back home ↗"</a></div> }>
+                    <Routes fallback=NotFound>
                         <Route path=path!("/") view=HomePage/>
                         <Route path=path!("/projects") view=ProjectsPage/>
                         <Route path=path!("/projects/:slug") view=ProjectDetailPage/>
@@ -34,5 +36,17 @@ pub fn App() -> impl IntoView {
                 <Footer/>
             </div>
         </Router>
+    }
+}
+
+#[component]
+fn NotFound() -> impl IntoView {
+    view! {
+        <div class="wrap page">
+            <header class="page-heading">
+                <h1 class="t-display-web">"Page not found."</h1>
+                <div class="actions"><TextLink href="/".into() label="Back home"/></div>
+            </header>
+        </div>
     }
 }

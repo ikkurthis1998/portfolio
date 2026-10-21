@@ -1,40 +1,48 @@
-// Export the same document and styles shown on the resume page.
+// Resume PDF export. Renders the same document as the page, as the Light-only A4 layout
+// (print has no dark mode), and drives the four PDF states: preparing, downloaded,
+// failed and unavailable.
 document.addEventListener('click', async function (event) {
     const button = event.target.closest?.('#download-resume-btn');
-    if (!button || button.disabled) return;
+    if (!button || button.dataset.loading === 'true') return;
     const source = document.getElementById('resume-content');
     const status = document.getElementById('pdf-status');
+    const label = button.querySelector('.btn-label');
+    const setStatus = (text, state) => {
+        if (!status) return;
+        status.textContent = text;
+        status.dataset.state = state;
+    };
     if (!source || typeof html2pdf === 'undefined') {
-        if (status) status.textContent = 'PDF export is unavailable. Use your browser’s Print menu to save a PDF.';
+        setStatus('PDF export is unavailable. Use your browser’s Print menu to save a PDF.', 'info');
         return;
     }
-    button.disabled = true;
-    if (status) status.textContent = 'Preparing PDF…';
+    button.dataset.loading = 'true';
+    button.setAttribute('aria-busy', 'true');
+    if (label) label.textContent = 'Preparing PDF…';
+    setStatus('Preparing PDF…', 'info');
     const container = document.createElement('div');
-    container.className = 'classic-resume resume-pdf-document';
-    container.style.cssText = 'width:794px;padding:0;background:white;';
+    container.className = 'theme-light resume-pdf';
+    container.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;background:#ffffff;';
     const documentCopy = source.cloneNode(true);
-    documentCopy.style.cssText = 'width:794px;max-width:none;margin:0;padding:0 32px;background:white;box-shadow:none;';
+    documentCopy.removeAttribute('id');
+    documentCopy.style.cssText = 'padding-top:0;padding-bottom:0;';
     container.appendChild(documentCopy);
+    document.body.appendChild(container);
     try {
         await document.fonts.ready;
-        await Promise.all(Array.from(source.querySelectorAll('img'), image => image.decode()));
-        // html2canvas does not preserve object-fit or currentColor SVGs reliably.
-        const portrait = source.querySelector('.resume-portrait');
-        if (portrait) {
-            const canvas = document.createElement('canvas');
-            canvas.width = canvas.height = 384;
-            const side = Math.min(portrait.naturalWidth, portrait.naturalHeight);
-            canvas.getContext('2d').drawImage(portrait, (portrait.naturalWidth - side) / 2, 0, side, side, 0, 0, 384, 384);
-            documentCopy.querySelector('.resume-portrait').src = canvas.toDataURL('image/png');
-        }
-        const originals = source.querySelectorAll('.resume-contact svg');
-        documentCopy.querySelectorAll('.resume-contact svg').forEach((svg, index) => {
-            const color = getComputedStyle(originals[index]).color;
+        // html2canvas does not resolve currentColor in inline SVG; bake the colour in.
+        documentCopy.querySelectorAll('.resume-contact svg').forEach(svg => {
+            const color = getComputedStyle(container).getPropertyValue('--text').trim() || '#171717';
             svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            svg.setAttribute('width', '16');
-            svg.setAttribute('height', '16');
-            const markup = new XMLSerializer().serializeToString(svg).replace(/currentColor/g, color);
+            svg.querySelectorAll('path').forEach(path => {
+                path.setAttribute('stroke', color);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke-width', '2.625');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-linejoin', 'round');
+                path.removeAttribute('vector-effect');
+            });
+            const markup = new XMLSerializer().serializeToString(svg);
             const icon = document.createElement('img');
             icon.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(markup);
             icon.width = icon.height = 16;
@@ -45,19 +53,21 @@ document.addEventListener('click', async function (event) {
         await Promise.all(Array.from(documentCopy.querySelectorAll('img'), image => image.decode()));
         await html2pdf().set({
             filename: 'Sreemannarayana_Ikkurthi_Resume.pdf',
-            margin: [8.47, 0, 8.47, 0],
+            margin: [12.7, 0, 12.7, 0],
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, backgroundColor: '#ffffff' },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy'], avoid: ['.resume-identity', '.resume-entry', '.resume-project-entry', '.resume-skills', '.resume-summary'] },
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.resume-identity', '.resume-entry', '.resume-project', '.resume-section'] },
             enableLinks: true
         }).from(container).save();
-        if (status) status.textContent = 'PDF downloaded.';
+        setStatus('PDF downloaded.', 'done');
     } catch (error) {
         console.error('PDF export failed', error);
-        if (status) status.textContent = 'Could not create the PDF. Use your browser’s Print menu to save a PDF.';
+        setStatus('Could not create the PDF. Use your browser’s Print menu to save a PDF.', 'error');
     } finally {
         container.remove();
-        button.disabled = false;
+        delete button.dataset.loading;
+        button.removeAttribute('aria-busy');
+        if (label) label.textContent = 'Download PDF';
     }
 });

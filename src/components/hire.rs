@@ -1,3 +1,4 @@
+use super::ui::{Chips, StepCopy, Steps, TextLink, EMAIL, THELIVI_IOS_URL, THELIVI_URL};
 use leptos::prelude::*;
 use leptos_meta::{Meta, Title};
 
@@ -61,47 +62,106 @@ pub fn HirePage() -> impl IntoView {
     view! {
         <Title text="Hire me — Sreemannarayana Ikkurthi"/>
         <Meta name="description" content="AI document assistants, fixing and launching AI-built apps, and full-stack work. Fixed-price packages on Upwork and Fiverr."/>
-        <div class="page-wrap">
-            <header class="page-heading"><p class="eyebrow">"Hire me / Fixed-price packages"</p><h1>"AI Document Assistants"<br/><span>"Fix & Launch AI-Built Apps"</span><br/>"Full-Stack"</h1><p>"Three fixed-price packages, each with a clear scope and delivery time. Hire me through Upwork or Fiverr."</p><div class="actions"><a class="button" href=UPWORK_URL target="_blank" rel="noopener noreferrer">"Hire me on Upwork ↗"</a><a class="text-link" href=FIVERR_URL target="_blank" rel="noopener noreferrer">"Hire me on Fiverr ↗"</a></div></header>
+        <div class="wrap page">
+            <header class="page-heading">
+                <div class="heading-text">
+                    <div class="heading-main"><p class="eyebrow">"Hire me / Fixed-price packages"</p>
+                        <h1 class="t-display-web">"AI Document"<br class="br-md"/>" Assistants"<br/>"Fix & Launch"<br class="br-md"/>" AI-Built Apps"<br/>"Full-Stack"</h1></div>
+                    <p class="t-prose measure">"Three fixed-price packages, each with a clear scope and delivery time. Hire me through Upwork or Fiverr."</p>
+                </div>
+                <div class="actions hire-actions">
+                    <a class="btn btn-primary" href=UPWORK_URL target="_blank" rel="noopener noreferrer">"Hire me on Upwork"</a>
+                    <a class="btn btn-secondary" href=FIVERR_URL target="_blank" rel="noopener noreferrer">"Hire me on Fiverr"</a>
+                </div>
+            </header>
 
-            <section id="offers" class="hire-offers" aria-labelledby="offers-title"><div class="section-bar"><h2 id="offers-title" class="eyebrow">"Packages"</h2><span class="mono">"Fixed price · USD"</span></div>
+            <section id="offers" class="offers" aria-labelledby="offers-title">
+                <div class="section-bar"><h2 id="offers-title" class="eyebrow">"Packages"</h2><span class="t-caption c-3">"Fixed price · USD"</span></div>
                 {OFFERS.iter().enumerate().map(|(i, o)| view! {
-                    <article class="offer-row"><div><span class="mono">{format!("{:02}", i + 1)}</span><h3>{o.name}</h3><p>{o.summary}</p></div>
-                        <div class="tier-grid">{o.tiers.iter().map(|t| view! {
-                            <div class="tier"><p class="mono">{t.name}</p><p class="tier-price">{t.price}</p><p>{t.scope}</p><p class="mono tier-delivery">{format!("Delivery · {}", t.delivery)}</p></div>
-                        }).collect_view()}</div>
+                    <article class="offer">
+                        <div class="offer-head">
+                            <div class="offer-name"><p class="num">{format!("{:02}", i + 1)}</p><h3 class="t-display">{o.name}</h3></div>
+                            <p class="t-prose">{o.summary}</p>
+                        </div>
+                        <ul class="grid-3 tiers">{o.tiers.iter().map(|t| view! {
+                            <li class="card tier-card">
+                                <p class="tier-name">{t.name}</p>
+                                <p class="t-display">{t.price}</p>
+                                <p class="t-body c-2">{t.scope}</p>
+                                <p class="t-caption c-3">{format!("Delivery · {}", t.delivery)}</p>
+                            </li>
+                        }).collect_view()}</ul>
                     </article>
                 }).collect_view()}
             </section>
 
-            <section class="narrative-row"><div><p class="eyebrow">"Proof / Thelivi"</p><h2>"An AI assistant"<br/><span>"I built solo and run."</span></h2></div><div class="prose">
-                <p>"Thelivi answers from your uploaded documents and shows the sources behind each answer. It also searches the web, remembers context between conversations and runs scheduled tasks."</p>
-                <p>"It has a web app and an iPhone app on the App Store. I designed, built and run it on my own."</p>
-                <ul class="topic-list"><li>"Go"</li><li>"Next.js"</li><li>"SwiftUI"</li></ul>
-                <div class="actions"><a class="text-link" href="https://thelivi.isree.dev" target="_blank" rel="noopener noreferrer">"Try Thelivi ↗"</a><a class="text-link" href="https://apps.apple.com/app/id6790257232" target="_blank" rel="noopener noreferrer">"iPhone app ↗"</a></div>
-            </div></section>
-
-            <section class="narrative-row"><div><p class="eyebrow">"Proof / Vihari"</p><h2>"A native trip tracker"<br/><span>"for iOS and Android."</span></h2></div><div class="prose">
-                <p>"Vihari is two native apps, SwiftUI on iOS and Jetpack Compose on Android. It records trips in the background, turns them into stops, routes and trips, and keeps your location history on your phone."</p>
-                <ul class="topic-list"><li>"SwiftUI"</li><li>"Jetpack Compose"</li></ul>
-                <div class="actions"><a class="text-link" href="/vihari/privacy">"Privacy policy"</a></div>
-            </div></section>
-
-            <section class="approach-section" aria-labelledby="process-title">
-                <p class="eyebrow section-label">"How I work"</p>
-                <div class="approach-grid"><h2 id="process-title">"Fixed scope."<br/><span>"Fixed price."</span></h2>
-                    <div><span class="mono">"01"</span><h3>"Written plan first"</h3><p>"You get the scope in writing and a fixed price before any work starts."</p></div>
-                    <div><span class="mono">"02"</span><h3>"Progress you can see"</h3><p>"On longer packages you see working demos as I go, so feedback lands early, not at the end."</p></div>
-                    <div><span class="mono">"03"</span><h3>"Clean, tested code"</h3><p>"Readable code with tests and docs, handed over so anyone can pick it up."</p></div>
+            <section class="split" aria-labelledby="proof-thelivi">
+                <div class="lead"><p class="eyebrow">"Proof / Thelivi"</p><h2 id="proof-thelivi" class="t-display">"An AI assistant"<br/>"I built solo and run."</h2></div>
+                <div class="prose">
+                    <p class="t-prose">"Thelivi answers from your uploaded documents and shows the sources behind each answer. It also searches the web, remembers context between conversations and runs scheduled tasks."</p>
+                    <p class="t-prose">"It has a web app and an iPhone app on the App Store. I designed, built and run it on my own."</p>
+                    <Chips items=vec!["Go".into(), "Next.js".into(), "SwiftUI".into()]/>
+                    <div class="proof-links">
+                        <TextLink href=THELIVI_URL.into() label="Try Thelivi" external=true/>
+                        <TextLink href=THELIVI_IOS_URL.into() label="iPhone app" external=true aria_label="Thelivi iPhone app on the App Store"/>
+                    </div>
                 </div>
             </section>
 
-            <section id="hire-contact" class="contact-section"><p class="eyebrow">"Start a project"</p><div class="contact-grid"><div><h2>"Pick a package to get started."</h2><p>"Hire me through Upwork or Fiverr. Not sure which package fits? Email me a few lines about your project."</p><p class="mono hire-email">"ikkurthis1998@gmail.com"</p><a class="text-link" href="mailto:ikkurthis1998@gmail.com">"Email me ↗"</a></div>
-                <div class="social-links"><span class="mono">"Hire me on"</span>
-                    <a href=UPWORK_URL target="_blank" rel="noopener noreferrer">"Upwork ↗"</a>
-                    <a href=FIVERR_URL target="_blank" rel="noopener noreferrer">"Fiverr ↗"</a>
-                </div></div></section>
+            <section class="split" aria-labelledby="proof-vihari">
+                <div class="lead"><p class="eyebrow">"Proof / Vihari"</p><h2 id="proof-vihari" class="t-display">"A native trip tracker"<br/>"for iOS and Android."</h2></div>
+                <div class="prose">
+                    <p class="t-prose">"Vihari is two native apps, SwiftUI on iOS and Jetpack Compose on Android. It records trips in the background, turns them into stops, routes and trips, and keeps your location history on your phone."</p>
+                    <Chips items=vec!["SwiftUI".into(), "Jetpack Compose".into()]/>
+                    <div class="proof-links"><TextLink href="/vihari/privacy".into() label="Privacy policy"/></div>
+                </div>
+            </section>
 
+            <section class="section" aria-labelledby="process-title">
+                <div class="section-head"><div class="section-bar"><p class="eyebrow">"How I work"</p></div><h2 id="process-title" class="t-display">"Fixed scope. Fixed price."</h2></div>
+                <Steps steps=HIRE_STEPS/>
+            </section>
+
+            <section id="hire-contact" class="contact" aria-labelledby="hire-contact-title">
+                <div class="section-text">
+                    <div class="section-head"><div class="section-bar"><p class="eyebrow">"Start a project"</p></div><h2 id="hire-contact-title" class="t-display">"Pick a package to get started."</h2></div>
+                    <p class="t-prose measure">"Hire me through Upwork or Fiverr. Not sure which package fits? Email me a few lines about your project."</p>
+                    <p class="hire-email">{EMAIL}</p>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-primary" href=format!("mailto:{EMAIL}")>"Email me"</a>
+                    <a class="btn btn-secondary" href=UPWORK_URL target="_blank" rel="noopener noreferrer">"Upwork"</a>
+                    <a class="btn btn-secondary" href=FIVERR_URL target="_blank" rel="noopener noreferrer">"Fiverr"</a>
+                </div>
+            </section>
         </div>
+    }
+}
+
+const HIRE_STEPS: &[StepCopy] = &[
+    StepCopy { title: "Written plan first", body: "You get the scope in writing and a fixed price before any work starts." },
+    StepCopy { title: "Progress you can see", body: "On longer packages you see working demos as I go, so feedback lands early, not at the end." },
+    StepCopy { title: "Clean, tested code", body: "Readable code with tests and docs, handed over so anyone can pick it up." },
+];
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn hire_copy_never_mentions_the_employer() {
+        let mut text = String::new();
+        for o in OFFERS {
+            text.push_str(o.name);
+            text.push_str(o.summary);
+            for t in &o.tiers {
+                text.push_str(t.name);
+                text.push_str(t.scope);
+            }
+        }
+        for s in HIRE_STEPS {
+            text.push_str(s.title);
+            text.push_str(s.body);
+        }
+        assert!(!text.to_lowercase().contains("neurofin"));
     }
 }

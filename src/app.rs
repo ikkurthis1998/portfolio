@@ -1,5 +1,4 @@
 use crate::components::*;
-use crate::pages::analytics::Analytics;
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{
@@ -29,7 +28,6 @@ pub fn App() -> impl IntoView {
                         <Route path=path!("/about") view=AboutPage/>
                         <Route path=path!("/hire") view=HirePage/>
                         <Route path=path!("/resume") view=Resume/>
-                        <Route path=path!("/analytics") view=Analytics/>
                         <Route path=path!("/vihari/privacy") view=VihariPrivacyPage/>
                     </Routes>
                 </main>

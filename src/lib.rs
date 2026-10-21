@@ -3,7 +3,6 @@ pub mod components;
 pub mod data;
 #[cfg(feature = "ssr")]
 pub mod db;
-pub mod pages;
 
 pub use app::App;
 

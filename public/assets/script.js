@@ -22,17 +22,24 @@ document.addEventListener('click', async function (event) {
     setStatus('Preparing PDF…', 'info');
     const container = document.createElement('div');
     container.className = 'theme-light resume-pdf';
-    container.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;background:#ffffff;';
+    container.style.cssText = 'width:794px;background:#ffffff;';
     const documentCopy = source.cloneNode(true);
     documentCopy.removeAttribute('id');
     documentCopy.style.cssText = 'padding-top:0;padding-bottom:0;';
     container.appendChild(documentCopy);
-    document.body.appendChild(container);
+    // Keep each section label on the same page as its first entry.
+    documentCopy.querySelectorAll('.resume-list > .eyebrow').forEach(label => {
+        const keep = document.createElement('div');
+        keep.className = 'resume-keep';
+        label.before(keep);
+        keep.append(label);
+        if (keep.nextElementSibling) keep.append(keep.nextElementSibling);
+    });
     try {
         await document.fonts.ready;
         // html2canvas does not resolve currentColor in inline SVG; bake the colour in.
         documentCopy.querySelectorAll('.resume-contact svg').forEach(svg => {
-            const color = getComputedStyle(container).getPropertyValue('--text').trim() || '#171717';
+            const color = '#5c5c5c'; // text/secondary (Light): the PDF is Light only
             svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
             svg.querySelectorAll('path').forEach(path => {
                 path.setAttribute('stroke', color);
@@ -57,7 +64,7 @@ document.addEventListener('click', async function (event) {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, backgroundColor: '#ffffff' },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy'], avoid: ['.resume-identity', '.resume-entry', '.resume-project', '.resume-section'] },
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.resume-identity', '.resume-keep', '.resume-entry', '.resume-project', '.resume-section'] },
             enableLinks: true
         }).from(container).save();
         setStatus('PDF downloaded.', 'done');

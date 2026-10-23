@@ -52,8 +52,10 @@ pub fn Icon(glyph: Glyph, #[prop(default = 16)] size: u32, #[prop(optional)] cla
     }
 }
 
-/// Product marks: a Latin initial on an accent tile (radius/md), exported from the
-/// Figma Product mark components.
+/// Product marks, from the final isree-design v2 assets (24 grid, 1.8 round strokes,
+/// 1.6 pad dot, drawn in currentColor). isree.dev shows its "si" mark untiled in
+/// accent-text; the products show their rounded accent-fill tile (favicon.svg) with a
+/// white mark.
 #[derive(Clone, Copy, PartialEq)]
 pub enum Brand {
     Isree,
@@ -73,46 +75,58 @@ impl Brand {
             Brand::Gamani => "mark-gamani",
         }
     }
-    fn glyph(self) -> (&'static str, &'static str) {
+
+    /// The mark's paths (mark.svg), in currentColor.
+    fn paths(self) -> AnyView {
         match self {
-            Brand::Isree => unreachable!("isree.dev uses IsreeMark, not a tile glyph"),
-            Brand::Thelivi => ("translate(9.5 8.86)", "M6.5 14.28C5.91333 14.28 5.46 14.12 5.14 13.8C4.82 13.4667 4.66 13.0067 4.66 12.42V3H1.52C1.02667 3 0.646667 2.87333 0.38 2.62C0.126667 2.35333 0 1.98 0 1.5C0 1.00667 0.126667 0.633333 0.38 0.38C0.646667 0.126667 1.02667 0 1.52 0H11.48C11.9733 0 12.3467 0.126667 12.6 0.38C12.8667 0.633333 13 1.00667 13 1.5C13 1.98 12.8667 2.35333 12.6 2.62C12.3467 2.87333 11.9733 3 11.48 3H8.34V12.42C8.34 13.0067 8.18667 13.4667 7.88 13.8C7.57333 14.12 7.11333 14.28 6.5 14.28Z"),
-            Brand::Vihari => ("translate(8.92 8.77)", "M7.09273 14.46C6.58606 14.46 6.17273 14.3533 5.85273 14.14C5.54606 13.9267 5.28606 13.5867 5.07273 13.12L0.232727 2.44C0.0193939 1.97333 -0.0472727 1.55333 0.0327273 1.18C0.112727 0.806667 0.299394 0.52 0.592727 0.320001C0.886061 0.106667 1.25273 0 1.69273 0C2.23939 0 2.64606 0.12 2.91273 0.36C3.19273 0.6 3.43273 0.953334 3.63273 1.42L7.71273 10.86H6.59273L10.6727 1.4C10.8727 0.933334 11.1127 0.586667 11.3927 0.36C11.6727 0.12 12.0661 0 12.5727 0C12.9861 0 13.3327 0.106667 13.6127 0.320001C13.8927 0.52 14.0661 0.806667 14.1327 1.18C14.2127 1.55333 14.1461 1.97333 13.9327 2.44L9.07273 13.12C8.87273 13.5867 8.61939 13.9267 8.31273 14.14C8.00606 14.3533 7.59939 14.46 7.09273 14.46Z"),
-            Brand::Suddhi => ("translate(9.6 8)", "M6.21814 15.994C5.63148 15.994 5.01548 15.95 4.37014 15.862C3.73948 15.7887 3.13814 15.6713 2.56614 15.51C1.99414 15.3487 1.48081 15.158 1.02614 14.938C0.630143 14.7473 0.351476 14.498 0.190143 14.19C0.0288095 13.8673 -0.0298572 13.53 0.0141429 13.178C0.0581429 12.826 0.18281 12.518 0.388143 12.254C0.593476 11.9753 0.86481 11.792 1.20214 11.704C1.53948 11.6013 1.92081 11.6453 2.34614 11.836C2.90348 12.1 3.53414 12.3053 4.23814 12.452C4.94214 12.5987 5.60214 12.672 6.21814 12.672C7.18614 12.672 7.86081 12.5473 8.24214 12.298C8.63814 12.034 8.83614 11.7113 8.83614 11.33C8.83614 10.9927 8.69681 10.7213 8.41814 10.516C8.15414 10.3107 7.67748 10.1347 6.98814 9.988L4.41414 9.438C3.00614 9.14467 1.95748 8.63133 1.26814 7.898C0.578809 7.16467 0.234143 6.21867 0.234143 5.06C0.234143 4.29733 0.388143 3.608 0.696143 2.992C1.01881 2.36133 1.46614 1.826 2.03814 1.386C2.62481 0.946 3.31414 0.608666 4.10614 0.373999C4.91281 0.124666 5.80748 0 6.79014 0C7.55281 0 8.32281 0.0879997 9.10014 0.263999C9.89214 0.425333 10.5741 0.674667 11.1461 1.012C11.4835 1.188 11.7255 1.43 11.8721 1.738C12.0188 2.046 12.0775 2.36867 12.0481 2.706C12.0188 3.02867 11.9015 3.31467 11.6961 3.564C11.5055 3.81333 11.2415 3.982 10.9041 4.07C10.5815 4.14333 10.1928 4.08467 9.73814 3.894C9.31281 3.70333 8.82881 3.564 8.28614 3.476C7.75814 3.37333 7.24481 3.322 6.74614 3.322C6.20348 3.322 5.74148 3.388 5.36014 3.52C4.97881 3.63733 4.68548 3.81333 4.48014 4.048C4.28948 4.28267 4.19414 4.554 4.19414 4.862C4.19414 5.17 4.31881 5.434 4.56814 5.654C4.83214 5.85933 5.30881 6.03533 5.99814 6.182L8.55014 6.732C9.97281 7.04 11.0361 7.546 11.7401 8.25C12.4441 8.954 12.7961 9.87067 12.7961 11C12.7961 11.7627 12.6421 12.452 12.3341 13.068C12.0261 13.684 11.5861 14.212 11.0141 14.652C10.4421 15.0773 9.75281 15.4073 8.94614 15.642C8.13948 15.8767 7.23014 15.994 6.21814 15.994Z"),
-            Brand::Gamani => ("translate(9.58 8.73)", "M7.56 14.54C5.94667 14.54 4.57333 14.24 3.44 13.64C2.32 13.04 1.46667 12.2 0.88 11.12C0.293333 10.04 0 8.78 0 7.34C0 6.22 0.173333 5.21333 0.52 4.32C0.88 3.41333 1.39333 2.64 2.06 2C2.72667 1.34667 3.54 0.853333 4.5 0.519999C5.47333 0.173333 6.57333 0 7.8 0C8.46667 0 9.14667 0.0666666 9.84 0.2C10.5333 0.32 11.2133 0.553333 11.88 0.9C12.2267 1.06 12.46 1.28667 12.58 1.58C12.7133 1.86 12.7533 2.16 12.7 2.48C12.66 2.78667 12.5467 3.07333 12.36 3.34C12.1867 3.59333 11.9467 3.76667 11.64 3.86C11.3333 3.94 10.9867 3.89333 10.6 3.72C10.2 3.53333 9.76667 3.39333 9.3 3.3C8.83333 3.19333 8.34 3.14 7.82 3.14C6.92667 3.14 6.18 3.3 5.58 3.62C4.99333 3.94 4.55333 4.41333 4.26 5.04C3.96667 5.66667 3.82 6.43333 3.82 7.34C3.82 8.7 4.15333 9.72667 4.82 10.42C5.48667 11.1133 6.47333 11.46 7.78 11.46C8.18 11.46 8.61333 11.42 9.08 11.34C9.56 11.26 10.04 11.1467 10.52 11L9.84 12.38V8.96H8.44C7.98667 8.96 7.63333 8.84667 7.38 8.62C7.14 8.39333 7.02 8.07333 7.02 7.66C7.02 7.24667 7.14 6.93333 7.38 6.72C7.63333 6.49333 7.98667 6.38 8.44 6.38H11.4C11.8667 6.38 12.22 6.50667 12.46 6.76C12.7133 7 12.84 7.35333 12.84 7.82V12.24C12.84 12.64 12.7533 12.98 12.58 13.26C12.42 13.54 12.16 13.74 11.8 13.86C11.1733 14.0733 10.4933 14.24 9.76 14.36C9.02667 14.48 8.29333 14.54 7.56 14.54Z"),
+            // "si": circuit trace with 45° bends from a via ring up to a pad dot.
+            Brand::Isree => view! {
+                <g transform="translate(0.2 -0.2)">
+                    <circle cx="6.6" cy="18.4" r="1.3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    <path d="M8.1 18.4H12.4L14.6 16.2V15.6L13.4 14.4H10.6L9.4 13.2V12.6L11.6 10.4H14.6L16.4 8.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="16.4" cy="5.5" r="1.6" fill="currentColor"/>
+                </g>
+            }
+            .into_any(),
+            Brand::Thelivi => view! {
+                <path d="M18.04 10.21A6.3 6.3 0 1 1 13.79 5.96" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <circle cx="16.45" cy="7.55" r="1.6" fill="currentColor"/>
+            }
+            .into_any(),
+            Brand::Vihari => view! {
+                <g transform="translate(0.6 0.1)">
+                    <path d="M4.5 18C8.8 18 8.2 12.4 11.4 12.4C13.4 12.4 14.6 10.6 15.58 9.06" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="17.5" cy="6.5" r="1.6" fill="currentColor"/>
+                </g>
+            }
+            .into_any(),
+            Brand::Suddhi => view! {
+                <path d="M6.85 13.25L10.10 17.15L14.74 10.13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <circle cx="16.45" cy="7.55" r="1.6" fill="currentColor"/>
+            }
+            .into_any(),
+            Brand::Gamani => view! {
+                <g transform="translate(0.2 -0.2)">
+                    <path d="M6.8 16.4C7.9 15.4 8.2 14 8.2 12.2C8.2 9.6 9.7 7.9 11.6 7.9C13.5 7.9 15 9.6 15 12.2C15 14 15.3 15.4 16.4 16.4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M10.2 19H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="16.6" cy="7.0" r="1.6" fill="currentColor"/>
+                </g>
+            }
+            .into_any(),
         }
     }
 }
 
 #[component]
 pub fn ProductMark(brand: Brand) -> impl IntoView {
-    if brand == Brand::Isree {
-        return view! { <IsreeMark/> }.into_any();
-    }
-    let (transform, d) = brand.glyph();
+    let tiled = brand != Brand::Isree;
     view! {
-        <svg class=format!("mark {}", brand.class()) width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <rect class="mark-tile" width="32" height="32" rx="12"/>
-            <path class="mark-glyph" transform=transform d=d/>
+        <svg class=format!("mark {}", brand.class()) width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            {tiled.then(|| view! { <rect class="mark-tile" width="24" height="24" rx="5.5"/> }.into_any())}
+            {brand.paths()}
         </svg>
     }
     .into_any()
-}
-
-/// isree.dev mark ("si"): a circuit trace with 45° bends from a via ring up to a pad
-/// dot (the "i"). Drawn untiled in currentColor (accent-text), from the final
-/// isree-design v2 mark.svg (24 grid, 1.8 round strokes, 1.6 pad dot).
-#[component]
-pub fn IsreeMark() -> impl IntoView {
-    view! {
-        <svg class="mark mark-isree" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-            <g transform="translate(0.2 -0.2)">
-                <circle cx="6.6" cy="18.4" r="1.3" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <path d="M8.1 18.4H12.4L14.6 16.2V15.6L13.4 14.4H10.6L9.4 13.2V12.6L11.6 10.4H14.6L16.4 8.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                <circle cx="16.4" cy="5.5" r="1.6" fill="currentColor"/>
-            </g>
-        </svg>
-    }
 }
 
 /// Product lockup/isree.dev: mark + name, linking home.

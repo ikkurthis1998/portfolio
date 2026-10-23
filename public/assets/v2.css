@@ -150,9 +150,8 @@ main { flex: 1 0 auto; }
 .icon path, .icon circle { vector-effect: non-scaling-stroke; }
 
 /* ── Product mark and lockup ─────────────────────────────────────────── */
-.mark { flex: none; width: 32px; height: 32px; display: block; }
+.mark { flex: none; width: 32px; height: 32px; display: block; color: var(--on-accent); } /* white mark on product tiles */
 .mark-tile { fill: var(--mark-fill); }
-.mark-glyph { fill: var(--mark-on, #ffffff); }
 .mark-isree { color: var(--accent-text); } /* untiled "si" mark, currentColor */
 .mark-thelivi { --mark-fill: var(--thelivi-fill); }
 .mark-vihari { --mark-fill: var(--vihari-fill); }

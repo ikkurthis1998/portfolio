@@ -1,4 +1,4 @@
-use super::editorial::{Contact, DataError, Loading};
+use super::ui::{BackLink, Chips, Contact, DataError, Loading, TextLink, ThemedImage, THELIVI_IOS_URL};
 use crate::data::{Project, fetch_portfolio_data};
 use leptos::prelude::*;
 use leptos_meta::Title;
@@ -48,40 +48,60 @@ fn category(project: &Project) -> &'static str {
     }
 }
 
-#[component]
-pub fn ProjectImage(project: Project) -> impl IntoView {
-    let name = project.name.clone();
-    match project.image.filter(|s| !s.is_empty()) {
-        Some(src) => view! { <img src=src alt=format!("{} — project preview", name) loading="lazy" width="1200" height="630"/> }.into_any(),
-        None => view! { <div class="project-image-fallback"><span class="mono">"PROJECT / EXPLORATION"</span><strong>{name}</strong></div> }.into_any(),
+/// v2 project art (light and dark), exported from the design; other projects fall back
+/// to their database image.
+fn themed_art(project: &Project) -> Option<(&'static str, &'static str)> {
+    match project_slug(project).as_str() {
+        "intelligence" => Some(("/assets/v2/project-thelivi-light.webp", "/assets/v2/project-thelivi-dark.webp")),
+        "airfoil-analysis" => Some(("/assets/v2/project-airfoil-light.webp", "/assets/v2/project-airfoil-dark.webp")),
+        "genetic-algorithm-optimization" => Some(("/assets/v2/project-ga-light.webp", "/assets/v2/project-ga-dark.webp")),
+        _ => None,
     }
 }
 
 #[component]
-pub fn ProjectRow(project: Project, index: usize) -> impl IntoView {
-    let href = format!("/projects/{}", project_slug(&project));
-    let has_mobile_app = project_slug(&project) == "intelligence";
-    let category = category(&project);
-    view! {
-        <article class="project-row" class:reverse=index % 2 == 1>
-            <div class="project-copy"><p class="eyebrow">{category}</p>
-                <h2><a href=href.clone()>{project.name.clone()}</a></h2>
-                <p class="project-description">{project_summary(&project)}</p>
-                <a class="text-link" href=href.clone()>"Explore project ↗"</a>
-                {has_mobile_app.then(|| view! { <div class="project-app-links"><MobileAppLinks/></div> })}
-            </div>
-            <a class="project-image" href=href aria-label=format!("Explore {}", project.name)><ProjectImage project=project.clone()/></a>
-        </article>
+pub fn ProjectImage(project: Project, #[prop(default = true)] lazy: bool) -> impl IntoView {
+    let alt = format!("{} — project preview", project.name);
+    match (themed_art(&project), project.image.filter(|s| !s.is_empty())) {
+        (Some((light, dark)), _) => view! { <ThemedImage light=light dark=dark alt=alt lazy=lazy/> }.into_any(),
+        (None, Some(src)) => view! { <img src=src alt=alt loading="lazy"/> }.into_any(),
+        (None, None) => ().into_any(),
     }
+}
+
+fn is_thelivi(project: &Project) -> bool {
+    project_slug(project) == "intelligence"
 }
 
 #[component]
 fn MobileAppLinks() -> impl IntoView {
     view! {
-        <a class="text-link" href="https://apps.apple.com/app/id6790257232" target="_blank" rel="noopener noreferrer" aria-label="Get Thelivi for iPhone on the App Store">"iPhone app ↗"</a>
-        <span class="mono" title="Currently in closed testing">"Android — coming soon"</span>
+        <TextLink href=THELIVI_IOS_URL.into() label="iPhone app" external=true aria_label="Get Thelivi for iPhone on the App Store"/>
+        <span class="t-caption c-3">"Android coming soon"</span>
     }
 }
+
+#[component]
+pub fn WorkCard(project: Project, index: usize) -> impl IntoView {
+    let href = format!("/projects/{}", project_slug(&project));
+    view! {
+        <article class="work-card" class:image-left=index % 2 == 1>
+            <div class="work-copy">
+                <div class="work-head"><p class="eyebrow">{category(&project)}</p>
+                    <h2 class="t-display"><a href=href.clone()>{project.name.clone()}</a></h2>
+                </div>
+                <p class="t-prose">{project_summary(&project)}</p>
+                <div class="work-links">
+                    <TextLink href=href.clone() label="Explore project"/>
+                    {is_thelivi(&project).then(|| view! { <MobileAppLinks/> })}
+                </div>
+            </div>
+            <a class="work-image" href=href aria-label=format!("Explore {}", project.name) tabindex="-1"><ProjectImage project=project.clone()/></a>
+        </article>
+    }
+}
+
+const FILTERS: [&str; 4] = ["All", "Software", "Aerospace", "Algorithms"];
 
 #[component]
 pub fn ProjectsPage() -> impl IntoView {
@@ -89,18 +109,23 @@ pub fn ProjectsPage() -> impl IntoView {
     let (filter, set_filter) = signal("All");
     view! {
         <Title text="Selected work — Sreemannarayana Ikkurthi"/>
-        <div class="page-wrap project-list">
-            <header class="page-heading"><p class="eyebrow">"Projects"</p><h1>"Selected "<span>"work."</span></h1><p>"Working software and engineering experiments, from AI research tools to aerodynamic analysis."</p></header>
-            <div class="project-filters" role="group" aria-label="Filter projects">
-                {["All", "Software", "Aerospace", "Algorithms"].into_iter().map(|label| view! {
-                    <button class:active=move || filter.get() == label aria-pressed=move || (filter.get() == label).to_string() on:click=move |_| set_filter.set(label)>{label}</button>
-                }).collect_view()}
-            </div>
+        <div class="wrap page">
+            <header class="page-heading">
+                <div class="heading-text">
+                    <div class="heading-main"><p class="eyebrow">"Projects"</p><h1 class="t-display-web">"Selected work."</h1></div>
+                    <p class="t-prose measure">"Working software and engineering experiments, from AI research tools to aerodynamic analysis."</p>
+                </div>
+                <div class="filters" role="group" aria-label="Filter projects">
+                    {FILTERS.into_iter().map(|label| view! {
+                        <button class="filter-chip" aria-pressed=move || (filter.get() == label).to_string() on:click=move |_| set_filter.set(label)>{label}</button>
+                    }).collect_view()}
+                </div>
+            </header>
             <Suspense fallback=|| view! { <Loading/> }>{move || data.get().map(|result| match result {
                 Ok(d) => {
                     let projects = ordered_projects(d.projects).into_iter().filter(|p| filter.get() == "All" || category(p) == filter.get()).collect::<Vec<_>>();
-                    if projects.is_empty() { view! { <p class="empty-state">"No projects in this category yet."</p> }.into_any() }
-                    else { projects.into_iter().enumerate().map(|(i,p)| view! { <ProjectRow project=p index=i/> }).collect_view().into_any() }
+                    if projects.is_empty() { view! { <p class="t-prose empty-state">"No projects in this category yet."</p> }.into_any() }
+                    else { view! { <div class="work-list">{projects.into_iter().enumerate().map(|(i, p)| view! { <WorkCard project=p index=i/> }).collect_view()}</div> }.into_any() }
                 },
                 Err(_) => view! { <DataError/> }.into_any()
             })}</Suspense>
@@ -114,33 +139,59 @@ pub fn ProjectDetailPage() -> impl IntoView {
     let params = use_params_map();
     let data = Resource::new(|| (), |_| fetch_portfolio_data());
     view! {
-        <div class="page-wrap">
-            <Suspense fallback=|| view! { <Loading/> }>{move || data.get().map(|result| match result {
-                Ok(d) => {
-                    let slug = params.read().get("slug").unwrap_or_default();
-                    let project = d.projects.into_iter().find(|p| project_slug(p) == slug);
-                    match project {
-                        Some(p) => {
-                            let title = format!("{} — Sreemannarayana Ikkurthi", p.name);
-                            let link_label = if p.url.contains("github.com") { "View source ↗" } else { "Visit project ↗" };
-                            view! {
-                                <Title text=title/>
-                                <header class="page-heading detail-heading"><a class="eyebrow" href="/projects">"← Work / "{category(&p)}</a><h1>{p.name.clone()}</h1>
-                                    <div class="actions"><a class="button" href=p.url.clone() target="_blank" rel="noopener noreferrer">{link_label}</a>{(project_slug(&p) == "intelligence").then(|| view! { <MobileAppLinks/> })}<span class="mono">{p.language.clone()}</span></div>
-                                </header>
-                                <div class="detail-image"><ProjectImage project=p.clone()/></div>
-                                <section class="narrative-row"><div><p class="eyebrow">"Overview"</p><h2>"What it does."</h2></div><div class="prose"><p>{p.description}</p>
-                                    <h3>"Tools & topics"</h3><ul class="topic-list">{p.topics.into_iter().map(|t| view! { <li>{t}</li> }).collect_view()}</ul>
-                                </div></section>
-                                <a class="text-link" href="/projects">"← All projects"</a>
-                                <Contact/>
-                            }.into_any()
-                        },
-                        None => view! { <Title text="Project not found — isree.dev"/><div class="page-heading"><h1>"Project not found."</h1><a class="text-link" href="/projects">"Explore all work ↗"</a></div> }.into_any()
-                    }
-                },
-                Err(_) => view! { <DataError/> }.into_any()
-            })}</Suspense>
+        <Suspense fallback=|| view! { <div class="wrap page"><Loading/></div> }>{move || data.get().map(|result| match result {
+            Ok(d) => {
+                let slug = params.read().get("slug").unwrap_or_default();
+                match d.projects.into_iter().find(|p| project_slug(p) == slug) {
+                    Some(p) => view! { <ProjectDetail project=p/> }.into_any(),
+                    None => view! { <ProjectNotFound/> }.into_any(),
+                }
+            },
+            Err(_) => view! { <div class="wrap page"><DataError/></div> }.into_any()
+        })}</Suspense>
+    }
+}
+
+#[component]
+fn ProjectDetail(project: Project) -> impl IntoView {
+    let p = project;
+    let title = format!("{} — Sreemannarayana Ikkurthi", p.name);
+    let link_label = if p.url.contains("github.com") { "View source" } else { "Visit project" };
+    view! {
+        <Title text=title/>
+        <div class="wrap page">
+            <header class="detail-heading">
+                <BackLink href="/projects" label=format!("Work / {}", category(&p))/>
+                <h1 class="t-display-web">{p.name.clone()}</h1>
+                <div class="detail-actions">
+                    <a class="btn btn-primary" href=p.url.clone() target="_blank" rel="noopener noreferrer">{link_label}</a>
+                    {is_thelivi(&p).then(|| view! { <MobileAppLinks/> })}
+                    <span class="t-caption c-2">{p.language.clone()}</span>
+                </div>
+            </header>
+            <div class="detail-image"><ProjectImage project=p.clone() lazy=false/></div>
+            <section class="split" aria-labelledby="overview-title">
+                <div class="lead"><p class="eyebrow">"Overview"</p><h2 id="overview-title" class="t-display">"What it does."</h2></div>
+                <div class="prose">
+                    <p class="t-prose">{p.description.clone()}</p>
+                    {(!p.topics.is_empty()).then(|| view! { <h3 class="t-headline">"Tools & topics"</h3><Chips items=p.topics.clone()/> })}
+                </div>
+            </section>
+            <div><BackLink href="/projects" label="All projects".into()/></div>
+            <Contact/>
+        </div>
+    }
+}
+
+#[component]
+fn ProjectNotFound() -> impl IntoView {
+    view! {
+        <Title text="Project not found — isree.dev"/>
+        <div class="wrap page">
+            <header class="page-heading">
+                <div class="heading-main"><p class="eyebrow">"Projects"</p><h1 class="t-display-web">"Project not found."</h1></div>
+                <div class="actions"><TextLink href="/projects".into() label="Explore all work"/></div>
+            </header>
         </div>
     }
 }
@@ -179,5 +230,13 @@ mod tests {
             ordered.into_iter().map(|p| p.name).collect::<Vec<_>>(),
             ["Intelligence", "Airfoil Analysis", "Other A", "Other B"]
         );
+    }
+    #[test]
+    fn every_featured_project_has_light_and_dark_art() {
+        for name in ["Thelivi", "Airfoil Analysis", "Genetic Algorithm Optimization"] {
+            let (light, dark) = themed_art(&project(name)).expect(name);
+            assert!(light.ends_with("-light.webp") && dark.ends_with("-dark.webp"));
+        }
+        assert!(themed_art(&project("Other")).is_none());
     }
 }

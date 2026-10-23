@@ -153,12 +153,12 @@ main { flex: 1 0 auto; }
 .mark { flex: none; width: 32px; height: 32px; display: block; }
 .mark-tile { fill: var(--mark-fill); }
 .mark-glyph { fill: var(--mark-on, #ffffff); }
-.mark-isree { --mark-fill: var(--accent-fill); --mark-on: var(--on-accent-fill); }
+.mark-isree { color: var(--accent-text); } /* untiled "si" mark, currentColor */
 .mark-thelivi { --mark-fill: var(--thelivi-fill); }
 .mark-vihari { --mark-fill: var(--vihari-fill); }
 .mark-suddhi { --mark-fill: var(--suddhi-fill); }
 .mark-gamani { --mark-fill: var(--gamani-fill); }
-.lockup { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; line-height: 22px; font-weight: 700; color: var(--text); border-radius: 12px; }
+.lockup { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; line-height: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); border-radius: 12px; }
 
 /* ── Buttons ─────────────────────────────────────────────────────────── */
 .btn {

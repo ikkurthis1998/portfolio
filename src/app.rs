@@ -11,7 +11,10 @@ use leptos_router::{
 pub fn App() -> impl IntoView {
     provide_meta_context();
     view! {
-        <Link rel="icon" type_="image/svg+xml" href="/assets/favicon.svg"/>
+        <Link rel="icon" type_="image/png" sizes="32x32" href="/assets/icons/icon-32.png"/>
+        <Link rel="icon" type_="image/png" sizes="48x48" href="/assets/icons/icon-48.png"/>
+        <Link rel="icon" type_="image/svg+xml" href="/assets/favicon.svg?v=2"/>
+        <Link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png"/>
         <Title text="Sreemannarayana Ikkurthi — Software & Systems"/>
         <Meta name="description" content="From first principles to working products. Sreemannarayana Ikkurthi builds software systems across EV infrastructure, AI products, and computational engineering."/>
         <Link rel="preload" href="/assets/fonts/nunito-latin-wght-normal.woff2" as_="font" type_="font/woff2" crossorigin="anonymous"/>

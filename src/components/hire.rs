@@ -20,15 +20,15 @@ struct Offer {
 
 const OFFERS: &[Offer] = &[
     Offer {
-        name: "AI assistant on your documents",
-        summary: "An AI assistant that answers from your manuals, contracts, research or policies, and shows which source each answer came from.",
+        name: "A custom AI assistant for your product or team",
+        summary: "An AI assistant that chats, searches the web, uses your tools and data, remembers context and shows its sources. Set up on Thelivi, or built into your own site or app.",
         tiers: [
             Tier { name: "Ready on Thelivi", price: "$99", delivery: "2 days",
-                scope: "I set it up on Thelivi, the AI assistant I built and run: your documents in a project, custom instructions, cited answers and scheduled runs such as a weekly summary. Thelivi is currently free to use." },
+                scope: "I set it up on Thelivi, the AI assistant I built and run: a project with your instructions and files, web search, memory of context, answers that show their sources, and scheduled runs such as a weekly summary. Thelivi is currently free to use." },
             Tier { name: "Custom", price: "$600", delivery: "10 days",
-                scope: "An assistant built into your own website or app: up to 500 pages, chat with cited answers, a clear “not found in your documents” reply, and an admin upload page. You own the code and data." },
+                scope: "An assistant built into your own website or app: chat that searches the web and your data, remembers context and shows its sources, plus an admin page to manage it. You own the code and data." },
             Tier { name: "Custom + integrations", price: "$1,800", delivery: "21 days",
-                scope: "Everything in Custom, plus automatic sync from Google Drive, Notion, Dropbox or a database, exact answers from structured data, a test set of your real questions, and team access." },
+                scope: "Everything in Custom, plus connections to your tools and data, such as Google Drive, Notion, Dropbox or a database, so it can look things up and act in them, a test set of your real questions, and team access." },
         ],
     },
     Offer {
@@ -61,12 +61,12 @@ const OFFERS: &[Offer] = &[
 pub fn HirePage() -> impl IntoView {
     view! {
         <Title text="Hire me — Sreemannarayana Ikkurthi"/>
-        <Meta name="description" content="AI document assistants, fixing and launching AI-built apps, and full-stack work. Fixed-price packages on Upwork and Fiverr."/>
+        <Meta name="description" content="Custom AI assistants, fixing and launching AI-built apps, and full-stack work. Fixed-price packages on Upwork and Fiverr."/>
         <div class="wrap page">
             <header class="page-heading">
                 <div class="heading-text">
                     <div class="heading-main"><p class="eyebrow">"Hire me / Fixed-price packages"</p>
-                        <h1 class="t-display-web">"AI Document"<br class="br-md"/>" Assistants"<br/>"Fix & Launch"<br class="br-md"/>" AI-Built Apps"<br/>"Full-Stack"</h1></div>
+                        <h1 class="t-display-web">"AI Assistants"<br/>"Fix & Launch"<br class="br-md"/>" AI-Built Apps"<br/>"Full-Stack"</h1></div>
                     <p class="t-prose measure">"Three fixed-price packages, each with a clear scope and delivery time. Hire me through Upwork or Fiverr."</p>
                 </div>
                 <div class="actions hire-actions">
@@ -98,7 +98,7 @@ pub fn HirePage() -> impl IntoView {
             <section class="split" aria-labelledby="proof-thelivi">
                 <div class="lead"><p class="eyebrow">"Proof / Thelivi"</p><h2 id="proof-thelivi" class="t-display">"An AI assistant"<br/>"I built solo and run."</h2></div>
                 <div class="prose">
-                    <p class="t-prose">"Thelivi answers from your uploaded documents and shows the sources behind each answer. It also searches the web, remembers context between conversations and runs scheduled tasks."</p>
+                    <p class="t-prose">"Thelivi is a general AI assistant for ideas to explore, decisions to make and work to track. It searches the web and your files, remembers context, runs scheduled tasks and shows its sources."</p>
                     <p class="t-prose">"It has a web app and an iPhone app on the App Store. I designed, built and run it on my own."</p>
                     <Chips items=vec!["Go".into(), "Next.js".into(), "SwiftUI".into()]/>
                     <div class="proof-links">
@@ -163,5 +163,7 @@ mod tests {
             text.push_str(s.body);
         }
         assert!(!text.to_lowercase().contains("neurofin"));
+        // The service and Thelivi are general AI assistants, not document tools.
+        assert!(!text.to_lowercase().contains("document"));
     }
 }

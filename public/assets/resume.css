@@ -1,0 +1,108 @@
+/* Resume (/resume): the pre-v2 classic format — a compact, white A4 document.
+   Restored from editorial.css at 4f187d5 with the inherited base rules folded in, and every
+   rule scoped to .classic-resume so v2.css and this file cannot affect each other.
+   The document is white in both colour modes (it is the printable page). */
+
+.classic-resume {
+  --r-ink: #090e32;
+  --r-blue: #1835ed;
+  --r-muted: #4b5877;
+  --r-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  background: #f3f4f6;
+  padding: 40px 20px 80px;
+  color: var(--r-ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+@media (prefers-color-scheme: dark) { .classic-resume { background: var(--canvas); } }
+
+.classic-resume a { color: inherit; text-decoration: none; }
+.classic-resume a:hover { color: var(--r-blue); }
+.classic-resume img, .classic-resume svg { display: block; max-width: 100%; }
+.classic-resume h1, .classic-resume h3, .classic-resume h4, .classic-resume p { margin: 0; font-weight: inherit; }
+.classic-resume h1, .classic-resume h3, .classic-resume h4 { font-weight: 700; text-wrap: wrap; }
+.classic-resume ul { list-style: none; padding: 0; }
+.classic-resume .mono { font: 12px/1.6 var(--r-mono); color: #465d9b; letter-spacing: .3px; }
+.classic-resume .eyebrow { text-transform: uppercase; }
+
+/* Floating download button and the PDF status line */
+.resume-download { position: fixed; bottom: 32px; right: 32px; z-index: 30; }
+.resume-download .button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 12px 22px;
+  border: 1px solid var(--r-blue, #1835ed); border-radius: 999px;
+  background: #0f172a; color: white;
+  font: 13px/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace; letter-spacing: .25px;
+  box-shadow: 0 8px 20px #0f172a30; cursor: pointer;
+  transition: background .18s, transform .18s;
+}
+.resume-download .button:hover { background: #0a22bb; color: white; transform: translateY(-2px); }
+.resume-download .button:disabled { opacity: .5; cursor: wait; }
+.resume-download .button:focus-visible { outline: 2px solid #1835ed; outline-offset: 5px; }
+.classic-resume #pdf-status { max-width: 794px; min-height: 20px; margin: 0 auto 12px; font-size: 12px; }
+.classic-resume #pdf-status:empty { display: none; }
+
+/* The document */
+.classic-resume #resume-content { max-width: 794px; margin: auto; padding: 32px; background: #fff; color: #0f172a; box-shadow: 0 4px 16px #0f172a15; }
+.classic-resume .resume-identity { display: grid; grid-template-columns: minmax(0, 1fr) 128px; column-gap: 24px; border: 0; border-bottom: 2px solid #0f172a; padding: 0 0 24px; margin-bottom: 24px; min-height: 0; }
+.classic-resume .resume-identity h1 { grid-column: 1; font-size: 36px; line-height: 40px; text-transform: uppercase; letter-spacing: -.9px; margin: 0 0 8px; }
+.classic-resume .resume-identity > p { grid-column: 1; font-size: 20px; font-weight: 500; margin: 0 0 16px; color: #475569; }
+.classic-resume .resume-portrait { grid-column: 2; grid-row: 1/4; align-self: center; width: 128px; height: 128px; object-fit: cover; object-position: top; border: 1px solid #e2e8f0; border-radius: 6px; box-shadow: 0 1px 2px #0f172a0d; }
+.classic-resume .resume-contact { grid-column: 1; display: flex; flex-wrap: wrap; gap: 16px; margin: 0; font: 14px/20px Arial, Helvetica, sans-serif; color: #475569; }
+.classic-resume .resume-contact a { display: inline-flex; align-items: center; gap: 6px; }
+.classic-resume .resume-contact svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.classic-resume #resume-content > section { padding: 0; margin: 0 0 24px; border: 0; display: block; }
+.classic-resume section > .eyebrow { font: 700 14px/1.5 Arial, sans-serif; color: #0f172a; letter-spacing: 1.5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin: 0 0 12px; }
+.classic-resume .resume-summary p { font-size: 14px; line-height: 1.625; max-width: none; text-align: justify; color: #334155; }
+
+.classic-resume .topic-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.classic-resume .topic-list li { border: 0; border-radius: 4px; background: #f1f5f9; font: 600 12px/1.5 Arial, sans-serif; padding: 4px 10px; color: #334155; }
+
+.classic-resume .experience-row { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; border: 0; padding: 0; margin: 0 0 20px; break-inside: avoid; }
+.classic-resume .experience-row > .mono { grid-column: 2; grid-row: 1; font: 500 12px/1.5 Arial, sans-serif; color: #64748b; margin: 0; }
+.classic-resume .experience-row > div:not(.prose) { grid-column: 1; grid-row: 1; }
+.classic-resume .experience-row h3 { font-size: 16px; line-height: 1.4; letter-spacing: -.5px; margin: 0 0 4px; }
+.classic-resume .experience-row .company { color: #1d4ed8; font-size: 14px; line-height: 1.5; margin: 0; }
+.classic-resume .experience-row .prose { grid-column: 1/-1; display: block; }
+.classic-resume .experience-row .prose p { font-size: 14px; margin: 0 0 8px; white-space: pre-line; text-align: justify; line-height: 1.625; color: #334155; }
+.classic-resume .experience-row .prose p:empty { display: none; }
+.classic-resume .experience-row .topic-list { gap: 4px 12px; }
+.classic-resume .experience-row .topic-list li { padding: 0; background: none; color: #64748b; font-size: 10px; font-weight: 400; font-style: italic; }
+.classic-resume .experience-row .topic-list li::before { content: "• "; }
+
+.classic-resume .resume-projects article { display: block; border: 1px solid #f1f5f9; border-radius: 4px; padding: 12px; margin: 0 0 16px; break-inside: avoid; }
+.classic-resume .resume-projects h4 { font-size: 14px; line-height: 20px; color: #0f172a; margin: 0; }
+.classic-resume .resume-project-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.classic-resume .resume-language { font-size: 12px; font-weight: 400; color: #64748b; font-style: italic; margin-left: 8px; }
+.classic-resume .resume-project-heading > a { font-size: 12px; color: #2563eb; white-space: nowrap; }
+.classic-resume .resume-projects article p { font-size: 12px; line-height: 1.6; color: var(--r-muted); margin: 0 0 4px; }
+
+@media (max-width: 767px) {
+  .classic-resume .resume-identity { display: flex; flex-direction: column; text-align: center; align-items: center; }
+  .classic-resume .resume-portrait { margin: 0 0 24px; }
+  .classic-resume .resume-identity h1 { font-size: 24px; line-height: 32px; margin: 0 0 8px; overflow-wrap: anywhere; }
+  .classic-resume .resume-contact { justify-content: center; overflow-wrap: anywhere; }
+}
+@media (max-width: 640px) {
+  .classic-resume { padding: 20px 12px 80px; }
+  .classic-resume #resume-content { padding: 20px 16px; }
+  .classic-resume .resume-portrait { float: none; display: block; margin: 0 auto 20px; }
+  .classic-resume .resume-identity h1 { font-size: 26px; margin: 0 0 8px; }
+  .classic-resume .experience-row { grid-template-columns: 1fr; }
+  .classic-resume .experience-row > .mono { grid-column: 1; grid-row: 2; }
+  .classic-resume .experience-row .prose { grid-row: 3; }
+  .resume-download { bottom: 16px; right: 16px; }
+  .resume-download .button { font-size: 11px; padding-inline: 17px; }
+}
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+  .resume-download, .classic-resume #pdf-status { display: none !important; }
+  .classic-resume { padding: 0; background: white; }
+  .classic-resume #resume-content { box-shadow: none; padding: 0; max-width: none; }
+  .classic-resume a { color: inherit !important; }
+}

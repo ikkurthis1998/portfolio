@@ -397,6 +397,12 @@ main { flex: 1 0 auto; }
 .work-image::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1px solid var(--border-card); pointer-events: none; transition: border-color 120ms ease; }
 .work-image:hover::after { border-color: var(--text-3); }
 .work-image img, .detail-image img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+/* Product screenshots framed as on the home product cards (phone screen or browser page) */
+.work-image .shot img, .detail-image .shot img { height: auto; object-fit: initial; }
+.work-image .shot-phone, .detail-image .shot-phone { width: 34%; top: 10%; }
+.work-image .shot-browser, .detail-image .shot-browser { top: 10%; left: 6%; right: 6%; }
+.detail-image .shot-phone, .detail-image .shot-browser { top: 7.6%; }
+.detail-image .shot-browser { left: 8%; right: 8%; }
 @media (max-width: 899.98px) {
   .work-list { gap: 48px; }
   .work-card { grid-template-columns: 1fr; align-items: stretch; }
@@ -434,45 +440,7 @@ main { flex: 1 0 auto; }
   .exp-card .t-prose { font-size: 15px; line-height: 22px; }
 }
 
-/* ── Resume ──────────────────────────────────────────────────────────── */
-.resume-page { gap: 32px; }
-.pdf-bar { display: flex; align-items: center; gap: 24px; }
-.pdf-status:empty { display: none; }
-.pdf-status { color: var(--text-2); }
-.pdf-status[data-state="done"] { color: var(--success); }
-.pdf-status[data-state="error"] { color: var(--danger); }
-@media (max-width: 639.98px) {
-  .resume-page { gap: 24px; }
-  .pdf-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
-}
-.resume-doc { padding: 48px; display: flex; flex-direction: column; gap: 40px; }
-.resume-identity { display: flex; flex-direction: column; gap: 8px; }
-.resume-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin-top: 0; }
-.resume-contact a { display: inline-flex; align-items: center; gap: 8px; min-height: 24px; font-size: 13px; line-height: 18px; font-weight: 700; color: var(--text); }
-.resume-contact .icon { color: var(--text-2); }
-.resume-identity .t-prose { line-height: 28px; }
-@media (max-width: 639.98px) { .resume-identity .t-prose { line-height: 24px; } }
-.resume-contact a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.resume-section { display: flex; flex-direction: column; gap: 16px; }
-.resume-list { display: flex; flex-direction: column; }
-.resume-entry { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 24px; padding-block: 16px; border-top: 1px solid var(--hairline); break-inside: avoid; }
-.resume-entry .t-headline { line-height: 24px; }
-.resume-project { display: flex; flex-direction: column; gap: 8px; padding-block: 16px; border-top: 1px solid var(--hairline); break-inside: avoid; }
-.resume-project-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.resume-project-name { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 8px; }
-@media (max-width: 1279.98px) { .resume-entry { grid-template-columns: 1fr; gap: 8px; } }
-@media (max-width: 899.98px) { .resume-doc { padding: 24px; gap: 32px; } }
-@media (max-width: 639.98px) {
-  .resume-doc { padding: 16px; gap: 32px; }
-  .resume-project-head { flex-direction: column; align-items: flex-start; gap: 8px; }
-}
-/* The A4 document (print and the PDF export): Light only, 794 wide, 48 margin, Body sizes */
-.resume-pdf .resume-doc, .resume-pdf.resume-doc { width: 794px; padding: 48px; gap: 32px; border-radius: 0; box-shadow: none; background: #ffffff; }
-.resume-pdf { color: var(--text); font-family: "Nunito", ui-rounded, system-ui, sans-serif; }
-.resume-pdf .t-prose { font-size: 15px; line-height: 22px; }
-.resume-pdf .resume-entry { grid-template-columns: 1fr; gap: 8px; }
-.resume-pdf .resume-identity .t-prose { line-height: 24px; }
-.resume-pdf .resume-role-name { font-size: 15px; line-height: 22px; }
+/* ── Resume: the classic pre-v2 document lives in resume.css (scoped to .classic-resume) ── */
 
 /* ── Hire ────────────────────────────────────────────────────────────── */
 .offers { display: flex; flex-direction: column; gap: 32px; }
@@ -505,17 +473,9 @@ main { flex: 1 0 auto; }
 @media (max-width: 1279.98px) { .policy-section { grid-template-columns: 1fr; } }
 @media (max-width: 639.98px) { .policy-section { padding-block: 24px; gap: 16px; } }
 
-/* ── Print: the resume prints as the A4 document, Light only ─────────── */
+/* ── Print: only the resume document prints (its own A4 rules are in resume.css) ── */
 @media print {
-  @page { size: A4; margin: 0; }
-  :root { color-scheme: light; --canvas: #ffffff; --surface: #ffffff; --surface-2: #f0f0f0; --text: #171717; --text-2: #5c5c5c; --text-3: #6d6d6d; --hairline: rgb(23 23 23 / 0.08); --border-card: rgb(23 23 23 / 0.08); --accent-fill: #171717; --on-accent-fill: #ffffff; --accent-text: #171717; --success: #157d3c; --success-wash: #e6f4ea; }
+  :root { color-scheme: light; --canvas: #ffffff; }
   body { background: #ffffff; }
-  .site-header, .site-footer, .skip-link, .pdf-bar, .mobile-menu { display: none !important; }
-  .page { padding: 0; }
-  .wrap { padding-inline: 0; }
-  .resume-doc { width: auto; max-width: 794px; margin: 0 auto; padding: 48px; gap: 32px; border: 0; border-radius: 0; box-shadow: none; }
-  .resume-doc .t-prose { font-size: 15px; line-height: 22px; }
-  .resume-entry { grid-template-columns: 1fr; gap: 8px; }
-  .resume-identity .t-prose { line-height: 24px; }
-  .t-display-web { font-size: 32px; line-height: 36px; }
+  .site-header, .site-footer, .skip-link, .mobile-menu { display: none !important; }
 }

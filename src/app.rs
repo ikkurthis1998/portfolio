@@ -18,9 +18,11 @@ pub fn App() -> impl IntoView {
         <Title text="Sreemannarayana Ikkurthi — Software & Systems"/>
         <Meta name="description" content="From first principles to working products. Sreemannarayana Ikkurthi builds software systems across EV infrastructure, AI products, and computational engineering."/>
         <Link rel="preload" href="/assets/fonts/nunito-latin-wght-normal.woff2" as_="font" type_="font/woff2" crossorigin="anonymous"/>
-        <Link rel="stylesheet" href="/assets/v2.css?v=2"/>
+        <Link rel="stylesheet" href="/assets/v2.css?v=3"/>
+        // The resume keeps its pre-v2 document format; every rule is scoped to .classic-resume.
+        <Link rel="stylesheet" href="/assets/resume.css?v=classic-1"/>
         <Script src="/assets/html2pdf.bundle.min.js"/>
-        <Script src="/assets/script.js?v=resume-v2"/>
+        <Script src="/assets/script.js?v=resume-classic-1"/>
         <Router>
             <a class="skip-link" href="#main-content">"Skip to content"</a>
             <div id="root">

@@ -1,19 +1,27 @@
-use super::ui::{DataError, Loading, EMAIL};
+use super::ui::{DataError, Glyph, Icon, Loading, EMAIL};
 use crate::data::{fetch_portfolio_data, Experience, Project};
 use leptos::prelude::*;
 use leptos_meta::Title;
 
-/// The resume keeps its pre-v2 format: the compact, white A4 document with the portrait,
-/// contact row, grey section rules and a floating "Download PDF" button. Its styles live in
-/// /assets/resume.css (scoped to `.classic-resume`); script.js exports the same document.
+/// The resume document keeps its pre-v2 structure (portrait, contact row, section rules).
+/// On screen it sits in the site's content container and follows the site theme; the PDF
+/// export and browser Print keep the classic white A4 styles. Styles live in
+/// /assets/resume.css: `.classic-resume` is the printable document, `.resume-page` the
+/// on-screen theme. script.js exports the document; the Download PDF button sits in the
+/// page's header row, in the normal flow.
 #[component]
 pub fn Resume() -> impl IntoView {
     let data = Resource::new(|| (), |_| fetch_portfolio_data());
     view! {
         <Title text="Resume — Sreemannarayana Ikkurthi"/>
-        <div class="classic-resume resume-page">
-            <div class="resume-download"><button id="download-resume-btn" class="button" aria-describedby="pdf-status">"Download PDF ↓"</button></div>
-            <p id="pdf-status" class="mono" role="status" aria-live="polite"></p>
+        <div class="wrap page classic-resume resume-page">
+            <div class="resume-toolbar">
+                <div class="section-bar">
+                    <h2 class="eyebrow">"Resume"</h2>
+                    <button id="download-resume-btn" type="button" class="btn btn-secondary btn-sm" aria-describedby="pdf-status">"Download PDF"<Icon glyph=Glyph::Download/></button>
+                </div>
+                <p id="pdf-status" class="t-body c-2" role="status" aria-live="polite"></p>
+            </div>
             <Suspense fallback=|| view! { <Loading/> }>{move || data.get().map(|result| match result {
                 Ok(d) => view! {
                     <div id="resume-content">

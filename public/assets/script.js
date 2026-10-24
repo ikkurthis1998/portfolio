@@ -4,6 +4,8 @@ document.addEventListener('click', async function (event) {
     if (!button || button.disabled) return;
     const source = document.getElementById('resume-content');
     const status = document.getElementById('pdf-status');
+    // The status line stays empty (hidden) until a click; each click starts fresh.
+    if (status) status.textContent = '';
     if (!source || typeof html2pdf === 'undefined') {
         if (status) status.textContent = 'PDF export is unavailable. Use your browser’s Print menu to save a PDF.';
         return;
@@ -28,9 +30,9 @@ document.addEventListener('click', async function (event) {
             canvas.getContext('2d').drawImage(portrait, (portrait.naturalWidth - side) / 2, 0, side, side, 0, 0, 384, 384);
             documentCopy.querySelector('.resume-portrait').src = canvas.toDataURL('image/png');
         }
-        const originals = source.querySelectorAll('.resume-contact svg');
-        documentCopy.querySelectorAll('.resume-contact svg').forEach((svg, index) => {
-            const color = getComputedStyle(originals[index]).color;
+        // On screen the icons follow the site theme; the PDF keeps the classic contact colour.
+        documentCopy.querySelectorAll('.resume-contact svg').forEach(svg => {
+            const color = '#475569';
             svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
             svg.setAttribute('width', '16');
             svg.setAttribute('height', '16');
@@ -52,7 +54,7 @@ document.addEventListener('click', async function (event) {
             pagebreak: { mode: ['css', 'legacy'], avoid: ['.resume-identity', '.resume-entry', '.resume-project-entry', '.resume-skills', '.resume-summary'] },
             enableLinks: true
         }).from(container).save();
-        if (status) status.textContent = 'PDF downloaded.';
+        if (status) status.textContent = '';
     } catch (error) {
         console.error('PDF export failed', error);
         if (status) status.textContent = 'Could not create the PDF. Use your browser’s Print menu to save a PDF.';

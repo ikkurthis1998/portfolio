@@ -1,7 +1,9 @@
-/* Resume (/resume): the pre-v2 classic format — a compact, white A4 document.
-   Restored from editorial.css at 4f187d5 with the inherited base rules folded in, and every
-   rule scoped to .classic-resume so v2.css and this file cannot affect each other.
-   The document is white in both colour modes (it is the printable page). */
+/* Resume (/resume).
+   .classic-resume: the pre-v2 classic format, a compact white A4 document. It is what the
+   PDF export (script.js renders a copy with only .classic-resume) and browser Print show.
+   .resume-page: the on-screen page. Inside @media screen it sits in the site's .wrap
+   container and follows the v2 theme tokens, so the sheet is not a white page on the
+   dark site. Print and export never match .resume-page rules. */
 
 .classic-resume {
   --r-ink: #090e32;
@@ -17,7 +19,6 @@
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
-@media (prefers-color-scheme: dark) { .classic-resume { background: var(--canvas); } }
 
 .classic-resume a { color: inherit; text-decoration: none; }
 .classic-resume a:hover { color: var(--r-blue); }
@@ -28,22 +29,12 @@
 .classic-resume .mono { font: 12px/1.6 var(--r-mono); color: #465d9b; letter-spacing: .3px; }
 .classic-resume .eyebrow { text-transform: uppercase; }
 
-/* Floating download button and the PDF status line */
-.resume-download { position: fixed; bottom: 32px; right: 32px; z-index: 30; }
-.resume-download .button {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 46px; padding: 12px 22px;
-  border: 1px solid var(--r-blue, #1835ed); border-radius: 999px;
-  background: #0f172a; color: white;
-  font: 13px/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace; letter-spacing: .25px;
-  box-shadow: 0 8px 20px #0f172a30; cursor: pointer;
-  transition: background .18s, transform .18s;
-}
-.resume-download .button:hover { background: #0a22bb; color: white; transform: translateY(-2px); }
-.resume-download .button:disabled { opacity: .5; cursor: wait; }
-.resume-download .button:focus-visible { outline: 2px solid #1835ed; outline-offset: 5px; }
-.classic-resume #pdf-status { max-width: 794px; min-height: 20px; margin: 0 auto 12px; font-size: 12px; }
-.classic-resume #pdf-status:empty { display: none; }
+/* Header row with the Download PDF button (site button styles from v2.css), in the flow */
+.resume-toolbar { display: flex; flex-direction: column; gap: 12px; font-family: "Nunito", ui-rounded, system-ui, sans-serif; }
+.resume-toolbar .section-bar { flex-wrap: wrap; }
+.resume-toolbar .eyebrow { text-transform: none; }
+.resume-toolbar #pdf-status { margin: 0; text-align: right; }
+.resume-toolbar #pdf-status:empty { display: none; }
 
 /* The document */
 .classic-resume #resume-content { max-width: 794px; margin: auto; padding: 32px; background: #fff; color: #0f172a; box-shadow: 0 4px 16px #0f172a15; }
@@ -95,14 +86,46 @@
   .classic-resume .experience-row { grid-template-columns: 1fr; }
   .classic-resume .experience-row > .mono { grid-column: 1; grid-row: 2; }
   .classic-resume .experience-row .prose { grid-row: 3; }
-  .resume-download { bottom: 16px; right: 16px; }
-  .resume-download .button { font-size: 11px; padding-inline: 17px; }
 }
 
 @media print {
   @page { size: A4; margin: 12mm; }
-  .resume-download, .classic-resume #pdf-status { display: none !important; }
-  .classic-resume { padding: 0; background: white; }
+  .resume-toolbar { display: none !important; }
+  .classic-resume, .classic-resume.wrap { padding: 0; background: white; }
   .classic-resume #resume-content { box-shadow: none; padding: 0; max-width: none; }
   .classic-resume a { color: inherit !important; }
+}
+
+/* On screen: the resume follows the site theme and the shared content container.
+   Colours are v2 tokens only (light and dark come from v2.css). */
+@media screen {
+  .resume-page.classic-resume { padding: var(--section-gap) max(var(--gutter), calc((100% - 1200px) / 2)); background: transparent; color: var(--text); font-family: "Nunito", ui-rounded, system-ui, sans-serif; gap: var(--block-gap); }
+  .resume-page.classic-resume a:hover { color: var(--text); }
+  .resume-page #resume-content {
+    max-width: none; margin: 0; padding: 40px;
+    background: var(--surface); color: var(--text); border-radius: 24px;
+    box-shadow: inset 0 0 0 1px var(--border-card), var(--shadow-card);
+  }
+  .resume-page .resume-identity { border-bottom: 1px solid var(--border-card); }
+  .resume-page .resume-identity h1 { color: var(--text); letter-spacing: -.02em; font-weight: 800; }
+  .resume-page .resume-identity > p { color: var(--text-2); font-weight: 600; }
+  .resume-page .resume-portrait { border-color: var(--border-card); }
+  .resume-page .resume-contact { font-family: inherit; font-weight: 600; color: var(--text-2); }
+  .resume-page section > .eyebrow { font-family: inherit; font-size: 13px; color: var(--text); border-bottom-color: var(--border-card); }
+  .resume-page .resume-summary p { font-size: 15px; color: var(--text-2); text-align: left; }
+  .resume-page .topic-list li { font-family: inherit; font-weight: 700; background: var(--surface-2); color: var(--text-2); }
+  .resume-page .experience-row > .mono { font-family: inherit; font-weight: 600; color: var(--text-3); }
+  .resume-page .experience-row h3 { color: var(--text); letter-spacing: 0; }
+  .resume-page .experience-row .company { color: var(--text-2); font-weight: 700; }
+  .resume-page .experience-row .prose p { font-size: 15px; color: var(--text-2); text-align: left; }
+  .resume-page .experience-row .topic-list li { background: none; color: var(--text-3); font-size: 12px; font-weight: 600; font-style: normal; }
+  .resume-page .resume-projects article { border-color: var(--border-card); border-radius: 12px; padding: 16px; }
+  .resume-page .resume-projects h4 { color: var(--text); }
+  .resume-page .resume-language { color: var(--text-3); font-style: normal; font-weight: 600; }
+  .resume-page .resume-project-heading > a { color: var(--accent-text); font-size: 13px; font-weight: 700; }
+  .resume-page .resume-project-heading > a:hover { text-decoration: underline; }
+  .resume-page .resume-projects article p { font-size: 13px; color: var(--text-2); }
+}
+@media screen and (max-width: 640px) {
+  .resume-page #resume-content { padding: 24px 16px; border-radius: 16px; }
 }

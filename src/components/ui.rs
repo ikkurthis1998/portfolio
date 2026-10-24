@@ -19,6 +19,7 @@ pub enum Glyph {
     Mail,
     Globe,
     Loader,
+    Download,
 }
 
 impl Glyph {
@@ -27,6 +28,7 @@ impl Glyph {
             Glyph::ArrowUpRight => &["M7 7h10v10", "M7 17 17 7"],
             Glyph::ArrowUp => &["m5 12 7-7 7 7", "M12 19V5"],
             Glyph::ArrowLeft => &["m12 19-7-7 7-7", "M19 12H5"],
+            Glyph::Download => &["M12 4v11", "m7 10 5 5 5-5", "M5 20h14"],
             Glyph::Menu => &["M4 5h16", "M4 12h16", "M4 19h16"],
             Glyph::Close => &["M18 6 6 18", "m6 6 12 12"],
             Glyph::Mail => &[

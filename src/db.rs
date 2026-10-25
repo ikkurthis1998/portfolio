@@ -17,6 +17,10 @@ pub struct SurrealClient {
     db: String,
     user: String,
     pass: String,
+    // Set when `user` is a NAMESPACE-level user (not root). SurrealDB's HTTP basic
+    // auth only checks root users unless the `surreal-auth-ns` header names the
+    // namespace the user is defined on.
+    auth_ns: Option<String>,
 }
 
 #[derive(Deserialize)]
@@ -29,7 +33,7 @@ struct SqlResp {
 }
 
 impl SurrealClient {
-    pub fn new(base: &str, ns: &str, db: &str, user: &str, pass: &str) -> Self {
+    pub fn new(base: &str, ns: &str, db: &str, user: &str, pass: &str, auth_ns: Option<&str>) -> Self {
         Self {
             http: reqwest::Client::new(),
             url: format!("{}/sql", base.trim_end_matches('/')),
@@ -37,19 +41,24 @@ impl SurrealClient {
             db: db.to_string(),
             user: user.to_string(),
             pass: pass.to_string(),
+            auth_ns: auth_ns.filter(|v| !v.is_empty()).map(str::to_string),
         }
     }
 
     /// Runs a batch of SurrealQL statements and returns one result value per
     /// statement (in order). Errors if any statement reports a non-OK status.
     pub async fn query(&self, sql: &str) -> Result<Vec<serde_json::Value>, String> {
-        let resp = self
+        let mut req = self
             .http
             .post(&self.url)
             .basic_auth(&self.user, Some(&self.pass))
             .header("surreal-ns", &self.ns)
             .header("surreal-db", &self.db)
-            .header("Accept", "application/json")
+            .header("Accept", "application/json");
+        if let Some(auth_ns) = &self.auth_ns {
+            req = req.header("surreal-auth-ns", auth_ns);
+        }
+        let resp = req
             .body(sql.to_string())
             .send()
             .await
@@ -93,8 +102,15 @@ pub struct AppState {
 /// Builds the client and verifies connectivity at boot (mirrors the old
 /// connect-on-start behaviour, but does not panic — the visit-recording path
 /// fails soft so the static site still serves if SurrealDB is briefly down).
-pub async fn init_db(base: &str, ns: &str, db: &str, user: &str, pass: &str) -> SurrealClient {
-    let client = SurrealClient::new(base, ns, db, user, pass);
+pub async fn init_db(
+    base: &str,
+    ns: &str,
+    db: &str,
+    user: &str,
+    pass: &str,
+    auth_ns: Option<&str>,
+) -> SurrealClient {
+    let client = SurrealClient::new(base, ns, db, user, pass, auth_ns);
     match client.health().await {
         Ok(_) => log::info!("Connected to SurrealDB at {base} (ns={ns} db={db})"),
         Err(e) => log::error!("SurrealDB health check failed at boot: {e}"),

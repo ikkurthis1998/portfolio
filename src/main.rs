@@ -27,11 +27,14 @@ async fn main() {
     if surreal_pass.is_empty() && std::env::var_os("PORTFOLIO_PREVIEW_DATA").is_none() {
         log::warn!("SURREALDB_PASS is not set — SurrealDB auth will fail until it is configured");
     }
+    // Namespace the SurrealDB user is defined on (e.g. `portfolio` for the
+    // namespace-scoped `portfolio_app` EDITOR user). Unset = root user.
+    let surreal_auth_ns = std::env::var("SURREALDB_AUTH_NS").ok();
     let preview = cfg!(debug_assertions) && std::env::var_os("PORTFOLIO_PREVIEW_DATA").is_some();
     let db_client = if preview {
-        db::SurrealClient::new(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass)
+        db::SurrealClient::new(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass, surreal_auth_ns.as_deref())
     } else {
-        db::init_db(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass).await
+        db::init_db(&surreal_base, &surreal_ns, &surreal_db, &surreal_user, &surreal_pass, surreal_auth_ns.as_deref()).await
     };
     let app_state = AppState { db: db_client };
 

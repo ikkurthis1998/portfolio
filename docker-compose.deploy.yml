@@ -19,7 +19,11 @@ services:
       - SURREALDB_URL=http://surrealdb:8000
       - SURREALDB_NS=portfolio
       - SURREALDB_DB=portfolio
+      # Namespace-scoped EDITOR user for the `portfolio` namespace only (not root),
+      # so a rotation of the shared instance's root password can't take the site
+      # down. SURREALDB_AUTH_NS names the namespace that user is defined on.
       - SURREALDB_USER=${SURREALDB_USER:-root}
+      - SURREALDB_AUTH_NS=${SURREALDB_AUTH_NS:-}
       - SURREALDB_PASS=${SURREALDB_PASS:?set SURREALDB_PASS in /opt/portfolio/.env}
     networks:
       - intelligence-net
